@@ -74,5 +74,20 @@ class NimClient:
         except Exception:
             return fallback
 
+    async def vision_text(self, model: str, image_path: Path, prompt: str, fallback: str = "") -> str:
+        try:
+            mime = "image/png" if image_path.suffix.lower() == ".png" else "image/jpeg"
+            encoded = base64.b64encode(image_path.read_bytes()).decode("ascii")
+            messages = [{
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
+                ],
+            }]
+            return await self.chat(model=model, messages=messages, response_json=False)
+        except Exception:
+            return fallback
+
 
 nim_client = NimClient()

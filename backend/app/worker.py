@@ -7,12 +7,12 @@ from .workflow import mark_step, progress_percent
 from .settings import get_settings
 from .services.curriculum import supported_subject, curriculum_for, minor_units, confirmation_units, legacy_mapping_for_text
 from .services.ingestion import unpack_inputs, read_first_page_text, make_asset
-from .services.metadata import metadata_from_text, exam_id_from_metadata, standardized_pdf_name
+from .services.metadata import metadata_from_text_ai, exam_id_from_metadata, standardized_pdf_name
 from .services.pdf_pipeline import (
-    detect_role, infer_combined_ranges, extract_pdf_range, render_pages, heuristic_question_records,
-    parse_answers, build_problem_pdf, build_answer_pdf, build_cover_pdf, build_toc_pdf, merge_pdfs, final_quality_check, extract_pdf_text,
+    detect_role_ai, infer_combined_ranges, extract_pdf_range, render_pages, heuristic_question_records,
+    parse_answers, build_problem_pdf, build_answer_pdf, build_cover_pdf, build_toc_pdf, merge_pdfs, final_quality_check, extract_pdf_text_with_vision,
 )
-from .services.tagging import tag_questions_heuristic, sorted_questions
+from .services.tagging import tag_questions_ai, sorted_questions
 
 
 def _finish(job: JobSnapshot, node: str, message: str = "완료") -> None:
@@ -124,13 +124,15 @@ async def run_until_review(job_id: str) -> None:
         for pdf in pdfs:
             _finish(job, "D1", "파일명에서 메타데이터 후보 추출")
             first_text, pages = read_first_page_text(pdf)
+            if len(first_text.strip()) < 80:
+                first_text = await extract_pdf_text_with_vision(pdf, max_pages=1)
             _finish(job, "D2", "첫 페이지만 텍스트/OCR 추출")
             _finish(job, "D3", "첫 페이지에서 메타데이터 후보 추출")
             asset = make_asset(pdf, pdf.name, first_text, pages)
             job.assets.append(asset)
             merged_meta_text += f"\n{pdf.name}\n{first_text[:1200]}"
         first_asset_name = job.assets[0].originalName
-        job.metadata = metadata_from_text(first_asset_name, merged_meta_text, job.input.subject, job.input.grade)
+        job.metadata = await metadata_from_text_ai(first_asset_name, merged_meta_text, job.input.subject, job.input.grade)
         _finish(job, "D4", "학교명 후보 생성")
         _finish(job, "D5", "학년도 후보 생성")
         _finish(job, "D6", "학년 후보 생성")
@@ -144,7 +146,7 @@ async def run_until_review(job_id: str) -> None:
         exam_id = exam_id_from_metadata(job.metadata)
         _finish(job, "D13", f"exam_id 생성: {exam_id}")
         for asset in job.assets:
-            detect_role(asset)
+            await detect_role_ai(asset)
             infer_combined_ranges(asset)
             asset.standardizedName = standardized_pdf_name(job.metadata, asset.role)
         _finish(job, "D14", "표준 규칙으로 PDF 파일명 후보 생성")
@@ -241,6 +243,7 @@ async def continue_processing(job_id: str) -> None:
             page_dir = job_dir / "pages" / a.id
             pdf_path = combined_question_paths.get(a.id, Path(a.storedPath)) if a.role == "combined" else Path(a.storedPath)
             images = render_pages(pdf_path, page_dir)
+            pdf_text = await extract_pdf_text_with_vision(pdf_path, a.questionRange, max_pages=6)
             _finish(job, "I1", "PDF별 폴더 생성")
             _finish(job, "I2", "PDF를 페이지별 이미지로 변환")
             _finish(job, "I3", "이미지 파일명에 페이지 번호 부여")
@@ -250,6 +253,9 @@ async def continue_processing(job_id: str) -> None:
             _finish(job, "I6", "문제/보기/선지/표/그래프 범위 확인")
             _finish(job, "I7", "문제 테두리 좌표 추정")
             qs = heuristic_question_records(a, exam_id, images)
+            if pdf_text.strip():
+                for q in qs:
+                    q.ocrText = pdf_text[:4000]
             all_question_records.extend(qs)
             _finish(job, "I8", "좌표 기준 문항 이미지 추출")
         _finish(job, "G1", "문제지 OCR 완료")
@@ -265,10 +271,10 @@ async def continue_processing(job_id: str) -> None:
             _run(job, "G2", "답지 PDF OCR 처리")
             texts = []
             for a in answer_assets:
-                texts.append(extract_pdf_text(Path(a.storedPath), a.answerRange))
+                texts.append(await extract_pdf_text_with_vision(Path(a.storedPath), a.answerRange, max_pages=3))
             for a in combined_assets:
                 answer_path = combined_answer_paths.get(a.id, Path(a.storedPath))
-                texts.append(extract_pdf_text(answer_path, None if answer_path != Path(a.storedPath) else a.answerRange))
+                texts.append(await extract_pdf_text_with_vision(answer_path, None if answer_path != Path(a.storedPath) else a.answerRange, max_pages=3))
             _finish(job, "G2")
             _finish(job, "G3", "답지 텍스트 추출")
             for txt in texts:
@@ -297,7 +303,7 @@ async def continue_processing(job_id: str) -> None:
                 {"type": "curriculum_exclusion", "count": excluded_count},
             )
         all_question_records = [q for q in all_question_records if not q.quality.get("excludedBy2022Curriculum")]
-        job.questions = tag_questions_heuristic(all_question_records, job.curriculum)
+        job.questions = await tag_questions_ai(all_question_records, job.curriculum)
         _finish(job, "H2", "AI/휴리스틱으로 문항별 단원 후보 지정")
         _finish(job, "H3", "primary_unit_id 저장")
         _finish(job, "H4", "secondary_unit_ids 저장")

@@ -14,6 +14,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 from ..models import PdfAsset, PageRange, QuestionRecord, AnswerRecord, IssueRecord, ExamMetadata
 from ..settings import get_settings
+from .nim import nim_client
 
 
 def detect_role(asset: PdfAsset) -> PdfAsset:
@@ -31,6 +32,38 @@ def detect_role(asset: PdfAsset) -> PdfAsset:
         asset.questionRange = PageRange(start=1, end=max(asset.pageCount, 1))
     elif asset.role == "answer":
         asset.answerRange = PageRange(start=1, end=max(asset.pageCount, 1))
+    return asset
+
+
+async def detect_role_ai(asset: PdfAsset) -> PdfAsset:
+    if not nim_client.enabled:
+        return detect_role(asset)
+    fallback = {
+        "role": asset.role,
+        "confidence": asset.confidence,
+        "questionRange": asset.questionRange.model_dump() if asset.questionRange else None,
+        "answerRange": asset.answerRange.model_dump() if asset.answerRange else None,
+    }
+    data = await nim_client.extract_json(
+        nim_client.settings.nvidia_nim_text_model,
+        "Classify a Korean exam PDF. Return JSON only with role as one of question, answer, combined, unknown; confidence 0..1; optional questionRange and answerRange objects with start/end page numbers.",
+        f"filename={asset.originalName}\npageCount={asset.pageCount}\nfirstPageText={asset.firstPageText or ''}",
+        fallback,
+    )
+    role = data.get("role")
+    if role in {"question", "answer", "combined", "unknown"}:
+        asset.role = role
+    try:
+        asset.confidence = float(data.get("confidence", asset.confidence))
+    except Exception:
+        pass
+    for attr in ("questionRange", "answerRange"):
+        raw = data.get(attr)
+        if isinstance(raw, dict) and raw.get("start") and raw.get("end"):
+            try:
+                setattr(asset, attr, PageRange(start=int(raw["start"]), end=int(raw["end"])))
+            except Exception:
+                pass
     return asset
 
 
@@ -70,6 +103,27 @@ def extract_pdf_text(path: Path, page_range: PageRange | None = None) -> str:
         return "\n".join(chunks)
     except Exception:
         return ""
+
+
+async def extract_pdf_text_with_vision(path: Path, page_range: PageRange | None = None, max_pages: int = 3) -> str:
+    text = extract_pdf_text(path, page_range)
+    if len(text.strip()) >= 80 or not nim_client.enabled:
+        return text
+    out_dir = path.parent / f"{path.stem}_ocr_pages"
+    pages = render_pages(path, out_dir, dpi=160)
+    if page_range:
+        pages = pages[max(0, page_range.start - 1):page_range.end]
+    chunks: list[str] = []
+    for page in pages[:max_pages]:
+        chunk = await nim_client.vision_text(
+            nim_client.settings.nvidia_nim_ocr_model,
+            page,
+            "Read all visible Korean and English text in this exam page. Return plain text only, preserving problem numbers and answer numbers when visible.",
+            "",
+        )
+        if chunk.strip():
+            chunks.append(chunk.strip())
+    return "\n\n".join(chunks) if chunks else text
 
 def render_pages(pdf_path: Path, out_dir: Path, dpi: int = 180) -> list[Path]:
     out_dir.mkdir(parents=True, exist_ok=True)

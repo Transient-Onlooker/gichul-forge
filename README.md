@@ -56,7 +56,7 @@ NVIDIA_NIM_BASE_URL=https://integrate.api.nvidia.com/v1
 # 역할별 모델. 계정에서 접근 가능한 NIM 모델명으로 교체하세요.
 NVIDIA_NIM_TEXT_MODEL=nvidia/nemotron-3-ultra-550b-a55b
 NVIDIA_NIM_VISION_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
-NVIDIA_NIM_OCR_MODEL=nvidia/nemotron-ocr-v2
+NVIDIA_NIM_OCR_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 NVIDIA_NIM_METADATA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
 NVIDIA_NIM_TAGGER_MODEL=nvidia/nemotron-3-ultra-550b-a55b
 NVIDIA_NIM_QA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
