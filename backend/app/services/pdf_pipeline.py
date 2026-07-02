@@ -8,6 +8,7 @@ from PIL import Image
 from pypdf import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -141,22 +142,20 @@ def render_pages(pdf_path: Path, out_dir: Path, dpi: int = 180) -> list[Path]:
 
 def heuristic_question_records(asset: PdfAsset, exam_id: str, image_paths: Iterable[Path]) -> list[QuestionRecord]:
     records: list[QuestionRecord] = []
-    q_no = 1
     for page_no, image_path in enumerate(image_paths, start=1):
-        # 초기 구현은 페이지당 최대 6문항 슬롯을 생성한다. 비전 모델이 있으면 worker에서 좌표/번호를 보강한다.
-        for _ in range(6):
-            records.append(QuestionRecord(
-                examId=exam_id,
-                questionId=f"{exam_id}_{q_no:03d}",
-                questionNumber=q_no,
-                sourcePdfId=asset.id,
-                sourceName=Path(asset.standardizedName or asset.originalName).stem,
-                pageNumber=page_no,
-                cropPath=str(image_path),
-                isLong=False,
-                quality={"heuristicSlot": True},
-            ))
-            q_no += 1
+        # 문항별 정확한 crop이 없을 때는 실제 원본 페이지 이미지를 한 항목으로 보존한다.
+        # 가짜 문항 슬롯보다 덜 정교하지만, 결과 PDF가 실제로 사용 가능한 형태가 된다.
+        records.append(QuestionRecord(
+            examId=exam_id,
+            questionId=f"{exam_id}_page_{page_no:03d}",
+            questionNumber=page_no,
+            sourcePdfId=asset.id,
+            sourceName=Path(asset.standardizedName or asset.originalName).stem,
+            pageNumber=page_no,
+            cropPath=str(image_path),
+            isLong=True,
+            quality={"fullPageFallback": True},
+        ))
     return records
 
 
@@ -196,28 +195,40 @@ def build_problem_pdf(path: Path, metadata: ExamMetadata, questions: list[Questi
     font = register_korean_font()
     c = canvas.Canvas(str(path), pagesize=A4)
     width, height = A4
-    per_page = 6
-    slot_w = (width - 24 * mm) / 2
-    slot_h = (height - 34 * mm) / 3
-    for i, q in enumerate(questions):
-        if i % per_page == 0:
-            if i:
-                c.showPage()
-            c.setFont(font, 13)
-            c.drawString(12 * mm, height - 14 * mm, f"{metadata.normalizedSubjectName} | 단원별 문제")
-        idx = i % per_page
-        col = idx % 2
-        row = idx // 2
-        x = 12 * mm + col * slot_w
-        y = height - 28 * mm - (row + 1) * slot_h
-        c.setLineWidth(1)
-        c.rect(x, y, slot_w - 3 * mm, slot_h - 3 * mm)
+    margin_x = 12 * mm
+    header_h = 20 * mm
+    footer_h = 10 * mm
+    image_box_w = width - margin_x * 2
+    image_box_h = height - header_h - footer_h
+
+    for i, q in enumerate(questions, start=1):
+        if i > 1:
+            c.showPage()
+        c.setFont(font, 12)
+        c.drawString(margin_x, height - 10 * mm, f"{metadata.normalizedSubjectName} | {q.primaryUnitId or '단원 미확인'}")
         c.setFont(font, 8)
-        c.drawString(x + 3 * mm, y + slot_h - 9 * mm, f"{q.sourceName} #{q.questionNumber} | {q.primaryUnitId or '단원 미확인'}")
-        c.setFont(font, 10)
-        c.drawString(x + 3 * mm, y + slot_h - 18 * mm, f"문항 이미지: {Path(q.cropPath or '').name or '미생성'}")
-        c.setFont(font, 8)
-        c.drawString(x + 3 * mm, y + 6 * mm, "원본 PDF 이미지 크롭은 backend/storage/jobs/.../pages에 저장됩니다.")
+        c.drawRightString(width - margin_x, height - 10 * mm, f"{q.sourceName} · page {q.pageNumber}")
+
+        image_path = Path(q.cropPath or "")
+        if image_path.exists():
+            with Image.open(image_path) as img:
+                img_w, img_h = img.size
+            scale = min(image_box_w / img_w, image_box_h / img_h)
+            draw_w = img_w * scale
+            draw_h = img_h * scale
+            x = margin_x + (image_box_w - draw_w) / 2
+            y = footer_h + (image_box_h - draw_h) / 2
+            c.drawImage(ImageReader(str(image_path)), x, y, width=draw_w, height=draw_h, preserveAspectRatio=True, mask="auto")
+            c.setLineWidth(0.5)
+            c.rect(x, y, draw_w, draw_h)
+        else:
+            c.setFont(font, 11)
+            c.drawString(margin_x, height / 2, f"원본 페이지 이미지를 찾을 수 없습니다: {image_path}")
+
+        if q.ocrText:
+            c.setFont(font, 7)
+            snippet = re.sub(r"\s+", " ", q.ocrText).strip()[:120]
+            c.drawString(margin_x, 6 * mm, snippet)
     c.save()
 
 

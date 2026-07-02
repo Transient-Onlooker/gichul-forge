@@ -69,12 +69,20 @@ if errorlevel 1 (
 if not exist "frontend\node_modules\next\package.json" (
   echo Installing frontend dependencies...
   pushd "%ROOT%frontend"
-  call npm install
+  if exist "pnpm-lock.yaml" (
+    call corepack pnpm install
+  ) else (
+    call npm install
+  )
   if errorlevel 1 (
-    popd
-    echo ERROR: Failed to install frontend dependencies.
-    pause
-    exit /b 1
+    echo npm/pnpm install failed. Retrying with npm...
+    call npm install
+    if errorlevel 1 (
+      popd
+      echo ERROR: Failed to install frontend dependencies.
+      pause
+      exit /b 1
+    )
   )
   popd
 )
