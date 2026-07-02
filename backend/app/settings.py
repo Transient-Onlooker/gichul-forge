@@ -14,12 +14,12 @@ class Settings(BaseSettings):
 
     nvidia_nim_api_key: str = ""
     nvidia_nim_base_url: str = "https://integrate.api.nvidia.com/v1"
-    nvidia_nim_text_model: str = "meta/llama-3.1-70b-instruct"
-    nvidia_nim_vision_model: str = "meta/llama-3.2-90b-vision-instruct"
-    nvidia_nim_ocr_model: str = "nvidia/ocdrnet"
-    nvidia_nim_metadata_model: str = "meta/llama-3.1-70b-instruct"
-    nvidia_nim_tagger_model: str = "meta/llama-3.1-70b-instruct"
-    nvidia_nim_qa_model: str = "meta/llama-3.1-70b-instruct"
+    nvidia_nim_text_model: str = "nvidia/nemotron-3-ultra-550b-a55b"
+    nvidia_nim_vision_model: str = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning"
+    nvidia_nim_ocr_model: str = "nvidia/nemotron-ocr-v2"
+    nvidia_nim_metadata_model: str = "nvidia/nemotron-3-ultra-550b-a55b"
+    nvidia_nim_tagger_model: str = "nvidia/nemotron-3-ultra-550b-a55b"
+    nvidia_nim_qa_model: str = "nvidia/nemotron-3-ultra-550b-a55b"
     nvidia_nim_timeout_seconds: int = 120
     nvidia_nim_max_retries: int = 2
 

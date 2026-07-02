@@ -53,12 +53,12 @@ NVIDIA_NIM_API_KEY=nvapi-...
 NVIDIA_NIM_BASE_URL=https://integrate.api.nvidia.com/v1
 
 # 역할별 모델. 계정에서 접근 가능한 NIM 모델명으로 교체하세요.
-NVIDIA_NIM_TEXT_MODEL=meta/llama-3.1-70b-instruct
-NVIDIA_NIM_VISION_MODEL=meta/llama-3.2-90b-vision-instruct
-NVIDIA_NIM_OCR_MODEL=nvidia/ocdrnet
-NVIDIA_NIM_METADATA_MODEL=meta/llama-3.1-70b-instruct
-NVIDIA_NIM_TAGGER_MODEL=meta/llama-3.1-70b-instruct
-NVIDIA_NIM_QA_MODEL=meta/llama-3.1-70b-instruct
+NVIDIA_NIM_TEXT_MODEL=nvidia/nemotron-3-ultra-550b-a55b
+NVIDIA_NIM_VISION_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+NVIDIA_NIM_OCR_MODEL=nvidia/nemotron-ocr-v2
+NVIDIA_NIM_METADATA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
+NVIDIA_NIM_TAGGER_MODEL=nvidia/nemotron-3-ultra-550b-a55b
+NVIDIA_NIM_QA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
 ```
 
 프론트 UI의 “모델/서버 설정” 카드에서 백엔드가 읽은 현재 모델명을 확인할 수 있습니다.
@@ -94,8 +94,8 @@ IMPLEMENTATION_AUDIT.md
 ### 구성
 
 - `all_mermaid_charts.md`: 모든 Mermaid 코드를 하나의 Markdown 문서로 모은 파일
-- `mermaid_charts/*.mmd`: 다이어그램별 Mermaid 원본 코드 파일
-- `mermaid_charts/99_original_single_full_flowchart.mmd`: 원본 단일 전체 Mermaid flowchart
+- `mermaid charts/*.mmd`: 다이어그램별 Mermaid 원본 코드 파일
+- `mermaid charts/99_original_single_full_flowchart.mmd`: 원본 단일 전체 Mermaid flowchart
 
 ### 다이어그램 파일 목록
 

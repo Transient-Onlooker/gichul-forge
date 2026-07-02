@@ -4,7 +4,7 @@
 
 ## 0. 전체 오케스트레이션
 
-파일: `mermaid_charts/00_overall_orchestration.mmd`
+파일: `mermaid charts/00_overall_orchestration.mmd`
 
 ```mermaid
 flowchart TD
@@ -51,7 +51,7 @@ flowchart TD
 
 ## 1. 업로드, 동의, 과목 검증
 
-파일: `mermaid_charts/01_upload_consent_subject_validation.mmd`
+파일: `mermaid charts/01_upload_consent_subject_validation.mmd`
 
 ```mermaid
 flowchart TD
@@ -81,7 +81,7 @@ flowchart TD
 
 ## 2. 파일 형식 확인 및 메타데이터 확정
 
-파일: `mermaid_charts/02_file_format_metadata.mmd`
+파일: `mermaid charts/02_file_format_metadata.mmd`
 
 ```mermaid
 flowchart TD
@@ -120,7 +120,7 @@ flowchart TD
 
 ## 3. PDF 역할 판별 및 문제지/답지 분리
 
-파일: `mermaid_charts/03_pdf_role_detection_split.mmd`
+파일: `mermaid charts/03_pdf_role_detection_split.mmd`
 
 ```mermaid
 flowchart TD
@@ -175,7 +175,7 @@ flowchart TD
 
 ## 4. OCR, 답지 파싱, 단원 태깅
 
-파일: `mermaid_charts/04_ocr_answer_parsing_unit_tagging.mmd`
+파일: `mermaid charts/04_ocr_answer_parsing_unit_tagging.mmd`
 
 ```mermaid
 flowchart TD
@@ -206,7 +206,7 @@ flowchart TD
 
 ## 5. 문항 이미지 추출 및 품질 검수
 
-파일: `mermaid_charts/05_question_image_extraction_quality_check.mmd`
+파일: `mermaid charts/05_question_image_extraction_quality_check.mmd`
 
 ```mermaid
 flowchart TD
@@ -252,7 +252,7 @@ flowchart TD
 
 ## 6. 단원별 배치 및 문제 PDF 생성
 
-파일: `mermaid_charts/06_unit_arrangement_problem_pdf_generation.mmd`
+파일: `mermaid charts/06_unit_arrangement_problem_pdf_generation.mmd`
 
 ```mermaid
 flowchart TD
@@ -298,7 +298,7 @@ flowchart TD
 
 ## 7. 답지 재구성, 표지, 목차, 최종 병합
 
-파일: `mermaid_charts/07_answer_cover_toc_final_merge.mmd`
+파일: `mermaid charts/07_answer_cover_toc_final_merge.mmd`
 
 ```mermaid
 flowchart TD
@@ -352,7 +352,7 @@ flowchart TD
 
 ## 8. 최종 검수 및 이슈 수정 루프
 
-파일: `mermaid_charts/08_final_review_issue_loop.mmd`
+파일: `mermaid charts/08_final_review_issue_loop.mmd`
 
 ```mermaid
 flowchart TD
@@ -390,7 +390,7 @@ flowchart TD
 
 ## 9. AI 호출 시점 전용 다이어그램
 
-파일: `mermaid_charts/09_ai_call_sequence.mmd`
+파일: `mermaid charts/09_ai_call_sequence.mmd`
 
 ```mermaid
 sequenceDiagram
@@ -484,7 +484,7 @@ sequenceDiagram
 
 ## 10. 상태 패널만 따로 분리
 
-파일: `mermaid_charts/10_status_panel.mmd`
+파일: `mermaid charts/10_status_panel.mmd`
 
 ```mermaid
 flowchart TD
