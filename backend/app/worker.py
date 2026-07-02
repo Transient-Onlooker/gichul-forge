@@ -5,7 +5,7 @@ from .models import JobSnapshot, IssueRecord, now_iso
 from .storage import store
 from .workflow import mark_step, progress_percent
 from .settings import get_settings
-from .services.curriculum import supported_subject, curriculum_for, minor_units
+from .services.curriculum import supported_subject, curriculum_for, minor_units, confirmation_units, legacy_mapping_for_text
 from .services.ingestion import unpack_inputs, read_first_page_text, make_asset
 from .services.metadata import metadata_from_text, exam_id_from_metadata, standardized_pdf_name
 from .services.pdf_pipeline import (
@@ -27,8 +27,30 @@ def _run(job: JobSnapshot, node: str, message: str = "처리 중") -> None:
     job.progress = progress_percent(job.steps)
 
 
-def _issue(job: JobSnapshot, node_id: str, title: str, detail: str, severity: str = "warning", auto: bool = False) -> None:
-    job.issues.append(IssueRecord(id=uuid.uuid4().hex, nodeId=node_id, title=title, detail=detail, severity=severity, autoFixable=auto))
+def _issue(job: JobSnapshot, node_id: str, title: str, detail: str, severity: str = "warning", auto: bool = False, context: dict | None = None) -> None:
+    job.issues.append(IssueRecord(id=uuid.uuid4().hex, nodeId=node_id, title=title, detail=detail, severity=severity, autoFixable=auto, context=context or {}))
+
+
+def _drop_unit(units, unit_id: str):
+    kept = []
+    for unit in units:
+        unit.children = _drop_unit(unit.children, unit_id)
+        if unit.id != unit_id:
+            kept.append(unit)
+    return kept
+
+
+def _apply_curriculum_issue_resolutions(job: JobSnapshot) -> None:
+    excluded = [
+        issue.context.get("unitId")
+        for issue in job.issues
+        if issue.resolved
+        and issue.context.get("type") == "curriculum_confirmation"
+        and str(issue.resolution or "").startswith("exclude_unit:")
+        and issue.context.get("unitId")
+    ]
+    for unit_id in excluded:
+        job.curriculum = _drop_unit(job.curriculum, unit_id)
 
 
 def _pause(job: JobSnapshot, node_id: str, message: str) -> JobSnapshot:
@@ -62,12 +84,22 @@ async def run_until_review(job_id: str) -> None:
             mark_step(job.steps, "X2", "failed", "지원하지 않는 과목")
             job.status = "failed"; job.error = "지원 과목은 과학 또는 수학입니다."; store.save(job); return
         _finish(job, "B1", "지원 과목")
-        _finish(job, "B2", "내장 교육과정 DB 조회")
+        _finish(job, "B2", "2022 개정 SQLite 교육과정 DB 조회")
         job.curriculum = curriculum_for(job.input.subject, job.input.grade)
         _finish(job, "B3", "대단원 로드")
         _finish(job, "B4", "중단원 로드")
         _finish(job, "B5", "소단원 로드")
         _finish(job, "B6", "소단원별 키워드/태그 기준 생성")
+        for unit in confirmation_units(job.curriculum):
+            _issue(
+                job,
+                "B6",
+                "2022 개정 단원 확인 필요",
+                f"{unit.title}: {unit.sourceNote or '2022 개정 기준으로 신규 또는 이동된 단원입니다. 포함 여부를 확인하세요.'}",
+                "warning",
+                False,
+                {"type": "curriculum_confirmation", "unitId": unit.id, "unitTitle": unit.title},
+            )
         store.save(job)
 
         job_dir = store.job_dir(job.id)
@@ -161,6 +193,7 @@ async def continue_processing(job_id: str) -> None:
     try:
         job.waitingFor = None
         _finish(job, "E16", "사용자가 진행 승인")
+        _apply_curriculum_issue_resolutions(job)
         job_dir = store.job_dir(job.id)
         exam_id = exam_id_from_metadata(job.metadata)
         split_dir = job_dir / "split"; split_dir.mkdir(exist_ok=True)
@@ -245,6 +278,25 @@ async def continue_processing(job_id: str) -> None:
         else:
             for n in ["G2","G3","G4","G5"]: mark_step(job.steps, n, "skipped", "답지 없음")
 
+        for q in all_question_records:
+            mapping = legacy_mapping_for_text(job.input.subject, " ".join([q.sourceName, q.ocrText or "", *q.tags]))
+            if mapping and mapping["action"] == "exclude":
+                q.quality["excludedBy2022Curriculum"] = True
+                q.quality["excludeReason"] = mapping["note"]
+            elif mapping and mapping["action"] == "confirm":
+                q.quality["legacyMappingNeedsConfirmation"] = mapping
+        excluded_count = sum(1 for q in all_question_records if q.quality.get("excludedBy2022Curriculum"))
+        if excluded_count:
+            _issue(
+                job,
+                "H8",
+                "2022 개정 범위 밖 문항 제외",
+                f"현재 2022 개정 기준에 없는 것으로 판단된 문항 {excluded_count}개를 생성 PDF 대상에서 제외했습니다.",
+                "info",
+                False,
+                {"type": "curriculum_exclusion", "count": excluded_count},
+            )
+        all_question_records = [q for q in all_question_records if not q.quality.get("excludedBy2022Curriculum")]
         job.questions = tag_questions_heuristic(all_question_records, job.curriculum)
         _finish(job, "H2", "AI/휴리스틱으로 문항별 단원 후보 지정")
         _finish(job, "H3", "primary_unit_id 저장")

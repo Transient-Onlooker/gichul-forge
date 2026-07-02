@@ -39,6 +39,11 @@ class CurriculumUnit(BaseModel):
     level: Literal["major", "middle", "minor"]
     title: str
     subjectArea: Literal["math", "science"]
+    curriculumRevision: str = "2022"
+    course: str = ""
+    status: Literal["active", "new", "transferred", "removed"] = "active"
+    sourceNote: Optional[str] = None
+    requiresConfirmation: bool = False
     keywords: list[str] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
     children: list["CurriculumUnit"] = Field(default_factory=list)
@@ -107,6 +112,7 @@ class IssueRecord(BaseModel):
     autoFixable: bool = False
     resolved: bool = False
     resolution: Optional[str] = None
+    context: dict = Field(default_factory=dict)
     createdAt: str = Field(default_factory=now_iso)
 
 

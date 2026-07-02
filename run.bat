@@ -66,7 +66,7 @@ if errorlevel 1 (
   )
 )
 
-if not exist "frontend\node_modules" (
+if not exist "frontend\node_modules\next\package.json" (
   echo Installing frontend dependencies...
   pushd "%ROOT%frontend"
   call npm install

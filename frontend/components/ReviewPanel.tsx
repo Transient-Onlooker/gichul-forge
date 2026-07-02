@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import { AlertTriangle, Check, FileCheck2, Save } from "lucide-react";
-import type { ExamMetadata, JobSnapshot, PdfAsset, PdfRole } from "@/lib/types";
+import type { ExamMetadata, IssueRecord, JobSnapshot, PdfAsset, PdfRole } from "@/lib/types";
 import { continueJob, finalizeJob, patchAsset, patchMetadata, resolveIssue } from "@/lib/api";
 
 export default function ReviewPanel({ job, refresh }: { job: JobSnapshot | null; refresh: () => void }) {
   const [saving, setSaving] = useState(false);
   if (!job) return <div className="empty">작업을 시작하면 메타데이터, PDF 역할, 검수 이슈가 여기에 표시됩니다.</div>;
+  const unresolvedCurriculum = job.issues.some(issue => issue.context?.type === "curriculum_confirmation" && !issue.resolved);
   async function saveMetadata(meta: ExamMetadata) {
     if (!job) return;
     setSaving(true); await patchMetadata(job.id, meta); setSaving(false); refresh();
@@ -18,11 +19,25 @@ export default function ReviewPanel({ job, refresh }: { job: JobSnapshot | null;
   return <div className="stack">
     {job.metadata && <MetadataEditor metadata={job.metadata} onSave={saveMetadata} saving={saving}/>} 
     <section className="subpanel stack"><div className="section-title"><FileCheck2 size={17}/><span>PDF 역할/페이지 범위</span></div>{job.assets.map(asset => <AssetEditor key={asset.id} asset={asset} onSave={saveAsset} saving={saving}/>)}</section>
-    <section className="subpanel stack"><div className="section-title"><AlertTriangle size={17}/><span>Issue Queue</span></div>{job.issues.length === 0 && <p className="muted">등록된 이슈가 없습니다.</p>}{job.issues.map(issue => <div className={`issue ${issue.severity}`} key={issue.id}><div><strong>{issue.nodeId} · {issue.title}</strong><p>{issue.detail}</p><small>{issue.resolved ? `해결됨: ${issue.resolution}` : issue.autoFixable ? "자동 수정 가능" : "사용자 확인 필요"}</small></div>{!issue.resolved && <button className="ghost" onClick={async () => { await resolveIssue(job.id, issue.id); refresh(); }}><Check size={14}/> 해결 처리</button>}</div>)}</section>
+    <section className="subpanel stack"><div className="section-title"><AlertTriangle size={17}/><span>Issue Queue</span></div>{job.issues.length === 0 && <p className="muted">등록된 이슈가 없습니다.</p>}{job.issues.map(issue => <IssueItem key={issue.id} jobId={job.id} issue={issue} refresh={refresh}/>)}</section>
     <div className="action-bar">
-      {job.waitingFor === "E16" && <button className="primary" onClick={async () => { await continueJob(job.id); refresh(); }}><Check size={16}/> 역할/메타데이터 확정 후 계속</button>}
+      {job.waitingFor === "E16" && <button className="primary" disabled={unresolvedCurriculum} onClick={async () => { await continueJob(job.id); refresh(); }}><Check size={16}/> 역할/메타데이터/교육과정 확정 후 계속</button>}
+      {job.waitingFor === "E16" && unresolvedCurriculum && <p className="muted">2022 개정 신규/이동 단원의 포함 여부를 먼저 선택하세요.</p>}
       {job.waitingFor === "S2" && <button className="primary" onClick={async () => { await finalizeJob(job.id); refresh(); }}><Check size={16}/> 최종 확인 및 다운로드 활성화</button>}
     </div>
+  </div>;
+}
+
+function IssueItem({ jobId, issue, refresh }: { jobId: string; issue: IssueRecord; refresh: () => void }) {
+  const isCurriculum = issue.context?.type === "curriculum_confirmation";
+  const unitId = String(issue.context?.unitId || "");
+  return <div className={`issue ${issue.severity}`}>
+    <div><strong>{issue.nodeId} · {issue.title}</strong><p>{issue.detail}</p><small>{issue.resolved ? `해결됨: ${issue.resolution}` : issue.autoFixable ? "자동 수정 가능" : "사용자 확인 필요"}</small></div>
+    {!issue.resolved && isCurriculum && <div className="asset-controls">
+      <button className="secondary" onClick={async () => { await resolveIssue(jobId, issue.id, `include_unit:${unitId}`); refresh(); }}><Check size={14}/> 포함</button>
+      <button className="ghost" onClick={async () => { await resolveIssue(jobId, issue.id, `exclude_unit:${unitId}`); refresh(); }}>이 단원 없이 진행</button>
+    </div>}
+    {!issue.resolved && !isCurriculum && <button className="ghost" onClick={async () => { await resolveIssue(jobId, issue.id); refresh(); }}><Check size={14}/> 해결 처리</button>}
   </div>;
 }
 
