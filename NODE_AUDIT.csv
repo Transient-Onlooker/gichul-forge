@@ -1,0 +1,162 @@
+﻿node_id,label,group,implementation_location,status
+A,기출문제 업로드,동의/업로드,"frontend/components/UploadWizard.tsx, backend/app/worker.py",COVERED
+B,과목 입력,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+A1,로컬 미리보기 제공,동의/업로드,"frontend/components/UploadWizard.tsx, backend/app/worker.py",COVERED
+A2,"개인정보, 필기, 채점 흔적 가능성 안내",동의/업로드,"frontend/components/UploadWizard.tsx, backend/app/worker.py",COVERED
+A3,AI/OCR 서버 처리 안내,동의/업로드,"frontend/components/UploadWizard.tsx, backend/app/worker.py",COVERED
+A4,저장 기간 및 삭제 가능 여부 안내,동의/업로드,"frontend/components/UploadWizard.tsx, backend/app/worker.py",COVERED
+A5,동의 확인,동의/업로드,"frontend/components/UploadWizard.tsx, backend/app/worker.py",COVERED
+X1,진행 중단,종료/오류,backend/app/worker.py,COVERED
+C1,파일 분석 시작,파일 분석,"backend/app/services/ingestion.py, backend/app/worker.py",COVERED
+B1,과학 또는 수학 과목인가,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+X2,지원하지 않는 과목 오류,종료/오류,backend/app/worker.py,COVERED
+B2,교육과정 DB 조회,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+B3,대단원 로드,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+B4,중단원 로드,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+B5,소단원 로드,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+B6,소단원별 키워드와 태그 기준 생성,과목/교육과정,"backend/app/services/curriculum.py, backend/app/worker.py",COVERED
+C2,업로드 파일 형식 확인,파일 분석,"backend/app/services/ingestion.py, backend/app/worker.py",COVERED
+C3,압축 해제,파일 분석,"backend/app/services/ingestion.py, backend/app/worker.py",COVERED
+C4,개별 PDF 분리,파일 분석,"backend/app/services/ingestion.py, backend/app/worker.py",COVERED
+X3,지원하지 않는 파일 형식 오류,종료/오류,backend/app/worker.py,COVERED
+D1,파일명에서 메타데이터 후보 추출,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D2,첫 페이지만 OCR,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D3,첫 페이지에서 메타데이터 후보 추출,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D4,학교명 후보 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D5,학년도 후보 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D6,학년 후보 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D7,학기 후보 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D8,시험명 후보 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D9,과목명 후보 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D10,교육과정 기준으로 과목명 후보 정규화,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D11,메타데이터 확인 UI 표시,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D12,"사용자가 학교명, 학년도, 학년, 학기, 시험명, 과목 수정 또는 확정",메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D13,확정 메타데이터로 exam_id 생성,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+D14,표준 규칙으로 PDF 파일명 변경,메타데이터,"backend/app/services/metadata.py, frontend/components/ReviewPanel.tsx",COVERED
+E1,PDF 역할 판별,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E2,PDF 역할,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E3,문제지로 표시,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E4,답지로 표시,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E5,합본 PDF로 표시,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E6,사용자 확인 필요 표시,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E7,문제지 시작 페이지 후보 추출,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E8,문제지 끝 페이지 후보 추출,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E9,답지 시작 페이지 후보 추출,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E10,답지 끝 페이지 후보 추출,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E11,역할 판별 confidence 저장,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E12,confidence 충분한가,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E13,사용자가 역할과 페이지 범위 수정,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E14,PDF 목록 표시,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E15,"표준 파일명, 역할, 페이지 범위 표시",PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+E16,사용자가 진행을 눌렀는가,PDF 역할,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+X4,대기 또는 수정 요청,종료/오류,backend/app/worker.py,COVERED
+F1,문제지 PDF와 답지 PDF 분리,PDF 분리,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+F2,구성 유형,PDF 분리,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+F3,답지 없음 표시,PDF 분리,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+X5,문제지 누락 오류,종료/오류,backend/app/worker.py,COVERED
+F4,exam_id 기준으로 문제지와 답지 매칭,PDF 분리,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+F5,페이지 범위 기준으로 문제지와 답지 분리,PDF 분리,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+F6,사용자가 직접 역할과 페이지 범위 지정,PDF 분리,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+G1,문제지 PDF OCR 처리,OCR/답지,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+G2,답지 PDF OCR 처리,OCR/답지,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+G3,답지 텍스트 추출,OCR/답지,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+G4,문항 번호별 정답 파싱,OCR/답지,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+G5,exam_id와 문항 번호 기준으로 답지 데이터 연결,OCR/답지,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+H1,OCR 완료 문제지 생성,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H2,AI가 문제지를 읽고 문항 번호별 단원 후보 지정,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H3,primary_unit_id 저장,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H4,secondary_unit_ids 저장,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H5,문항별 tags 저장,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H6,단원 태깅 confidence 저장,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H7,confidence 충분한가,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H8,사용자가 단원 태그 확인 및 수정,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+H9,문항별 단원 태그 확정,단원 태깅,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+I1,PDF별 폴더 생성,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I2,PDF를 페이지별 이미지로 변환,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I3,이미지 파일명에 페이지 번호 부여,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I4,이미지별 AI 호출,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I5,이미지 안의 문제 번호 확인,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I6,"문제, 보기, 선지, 표, 그래프 범위 확인",문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I7,AI가 문제 테두리 좌표 추정,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+I8,좌표 기준으로 문항 이미지 추출,문항 추출,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+J1,문항 이미지 품질 검수,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J2,문제 잘림 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J3,보기와 선지 누락 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J4,공통 보기 누락 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J5,여러 페이지 문제 여부 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J6,공백 과다 여부 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J7,비정상적으로 긴 이미지 여부 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J8,화질과 크기 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J9,"페이지 번호, 푸터, 수고하셨습니다 등 불필요 문구 확인",이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J10,정상 문항 이미지인가,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J11,문항 이미지 확정,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J12,재추출 횟수 확인,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J13,문제점 기록 후 AI 재추출,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+J14,사용자가 직접 문항 영역 지정,이미지 품질,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+K1,문항별 고유 ID 생성,문항 ID,backend/app/worker.py,COVERED
+K2,question_id = exam_id + question_number,문항 ID,backend/app/worker.py,COVERED
+K3,문항 이미지에 단원 태그 부여,문항 ID,backend/app/worker.py,COVERED
+L1,출력 옵션 선택,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L2,배치 방식,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L3,primary_unit_id 기준 배치,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L4,secondary_unit_ids에도 중복 배치,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L5,동일 시험지 내 question_id 중복 검사,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L6,중복 생성 문제가 있는가,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L7,중복 문항 표시 후 사용자 선택,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L8,소단원별 문항 이미지 정렬,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L9,단원 안에서 고사명 기준 정렬,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L10,"옛날 기출 앞, 최신 기출 뒤",정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+L11,소단원별 정렬 순서 확정,정렬/배치,"backend/app/services/tagging.py, backend/app/worker.py",COVERED
+M1,Python으로 문제 페이지 레이아웃 구성,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M2,한 페이지당 기본 6문제 배치,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M3,긴 문제인가,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M4,두 칸 차지,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M5,한 칸 차지,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M6,문제별 검은색 테두리 삽입,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M7,문제 위에 출처명 표시,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M8,출처명은 이미지 파일명 사용,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M9,"각 문제 페이지 상단에 대단원, 중단원, 소단원 제목 표시",문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+M10,문제 PDF 생성,문제 PDF,backend/app/services/pdf_pipeline.py,COVERED
+N1,문제 번호와 답지 번호 매칭 검증,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N2,문제와 답지 번호가 일치하는가,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N3,누락 또는 불일치 문항 표시,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N4,사용자 수정 또는 답지 재파싱,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N5,소단원별 정렬 순서 기준으로 답지 순서 재구성,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N6,보조단원 중복 배치 옵션인가,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N7,중복 배치된 문제의 답도 각 단원 답지에 중복 삽입,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N8,주단원 기준 문제 순서대로 답지 구성,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+N9,답지 페이지 생성,답지 PDF,"backend/app/services/pdf_pipeline.py, backend/app/worker.py",COVERED
+O1,학교명 확정,표지,backend/app/services/pdf_pipeline.py,COVERED
+O2,표지 제목 생성,표지,backend/app/services/pdf_pipeline.py,COVERED
+O3,제목: 학교명 기출문제 모음집,표지,backend/app/services/pdf_pipeline.py,COVERED
+O4,사용한 기출문제 이름 목록 정리,표지,backend/app/services/pdf_pipeline.py,COVERED
+O5,표지 하단에 사용 기출문제명 표시,표지,backend/app/services/pdf_pipeline.py,COVERED
+O6,표지 생성,표지,backend/app/services/pdf_pipeline.py,COVERED
+O7,표지에 저작권 문구 추가,표지,backend/app/services/pdf_pipeline.py,COVERED
+O8,문구: 이 모음집의 저작권은 OOOO학교에 있습니다,표지,backend/app/services/pdf_pipeline.py,COVERED
+P1,"교육과정의 대단원, 중단원, 소단원 구조 정리",목차,backend/app/services/pdf_pipeline.py,COVERED
+P2,소단원별 정렬 순서를 목차에 반영,목차,backend/app/services/pdf_pipeline.py,COVERED
+P3,목차 페이지 생성,목차,backend/app/services/pdf_pipeline.py,COVERED
+P4,목차에 저작권 문구 추가,목차,backend/app/services/pdf_pipeline.py,COVERED
+Q1,"표지, 목차, 문제 PDF, 답지 페이지 병합",병합,backend/app/services/pdf_pipeline.py,COVERED
+Q2,최종 PDF 생성,병합,backend/app/services/pdf_pipeline.py,COVERED
+R1,AI 최종 검수,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R2,표지 존재 여부 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R3,목차 존재 여부 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R4,문제 페이지 존재 여부 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R5,답지 페이지 존재 여부 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R6,문항 수와 답지 수 일치 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R7,목차 순서와 실제 문제 순서 일치 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R8,깨진 이미지와 빈 페이지 확인,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R9,issue queue 생성,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R10,이슈가 있는가,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+S1,사용자 최종 미리보기 제공,최종 확인,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+R11,자동 수정 가능한 이슈인가,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R12,시스템이 수정 방향 결정,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R13,문제 있는 부분만 부분 재생성,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R14,사용자 확인이 필요한 이슈만 표시,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R15,사용자가 선택 또는 최소 수정,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+R16,선택 결과를 반영해 부분 재생성,최종 검수,"backend/app/services/pdf_pipeline.py, frontend/components/ReviewPanel.tsx",COVERED
+S2,사용자가 최종 확인했는가,최종 확인,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+S3,최종 PDF 제공,최종 확인,"backend/app/worker.py, frontend/components/ReviewPanel.tsx",COVERED
+STATUS,처리 상태 패널 업데이트,상태 패널,"frontend/components/StatusTimeline.tsx, backend/app/workflow.py",COVERED

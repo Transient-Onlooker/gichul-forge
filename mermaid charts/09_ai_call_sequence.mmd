@@ -1,0 +1,87 @@
+sequenceDiagram
+    autonumber
+
+    participant U as 사용자
+    participant UI as 웹 UI
+    participant SYS as 시스템 서버
+    participant OCR as OCR 서버
+    participant AI as AI 모델
+    participant DB as 교육과정/문항 DB
+    participant PDF as PDF 생성기
+
+    U->>UI: 기출문제 업로드
+    UI->>U: 개인정보/AI 처리/저장 동의 요청
+    U->>UI: 동의 및 과목 입력
+
+    UI->>SYS: 파일과 과목 전달
+    SYS->>DB: 교육과정 DB 조회
+    DB-->>SYS: 대단원/중단원/소단원/태그 기준 반환
+
+    SYS->>OCR: 첫 페이지만 OCR 요청
+    OCR-->>SYS: 첫 페이지 텍스트 반환
+
+    SYS->>AI: AI 호출 1 - 파일명과 첫 페이지 기반 메타데이터 후보 추출
+    AI-->>SYS: 학교명, 학년도, 학년, 학기, 시험명, 과목 후보 반환
+
+    SYS->>UI: 메타데이터 확인 UI 표시
+    U->>UI: 메타데이터 수정 또는 확정
+
+    SYS->>AI: AI 호출 2 - PDF 역할 판별
+    AI-->>SYS: 문제지/답지/합본/불명확 및 confidence 반환
+
+    alt confidence 부족
+        SYS->>UI: 역할과 페이지 범위 사용자 확인 요청
+        U->>UI: 역할과 페이지 범위 확정
+    end
+
+    SYS->>OCR: 문제지 OCR 요청
+    OCR-->>SYS: 문제지 OCR 텍스트 반환
+
+    opt 답지 있음
+        SYS->>OCR: 답지 OCR 요청
+        OCR-->>SYS: 답지 OCR 텍스트 반환
+        SYS->>AI: AI 호출 3 - 답지 정답 파싱
+        AI-->>SYS: 문항 번호별 정답 데이터 반환
+    end
+
+    SYS->>AI: AI 호출 4 - 문제지 문항별 단원 태깅
+    AI-->>SYS: primary_unit_id, secondary_unit_ids, tags, confidence 반환
+
+    alt 단원 태깅 confidence 부족
+        SYS->>UI: 단원 태그 사용자 확인 요청
+        U->>UI: 단원 태그 수정 또는 확정
+    end
+
+    SYS->>AI: AI 호출 5 - 페이지 이미지별 문제 영역 탐지
+    AI-->>SYS: 문제 번호와 문항 테두리 좌표 반환
+
+    SYS->>AI: AI 호출 6 - 문항 이미지 품질 검수
+    AI-->>SYS: 잘림, 누락, 공통 보기 누락, 재추출 여부 반환
+
+    alt 재추출 필요
+        SYS->>AI: AI 호출 7 - 문제점 반영 후 재추출 좌표 요청
+        AI-->>SYS: 수정 좌표 반환
+    else 3회 초과
+        SYS->>UI: 사용자 직접 영역 지정 요청
+        U->>UI: 문항 영역 지정
+    end
+
+    SYS->>DB: 문항 ID, 단원 태그, 정답 저장
+    SYS->>PDF: 문제 PDF, 답지, 표지, 목차 생성 요청
+    PDF-->>SYS: 최종 PDF 초안 반환
+
+    SYS->>AI: AI 호출 8 - 최종 PDF 검수
+    AI-->>SYS: issue queue 반환
+
+    alt 자동 수정 가능
+        SYS->>PDF: 문제 있는 부분만 재생성
+        SYS->>AI: AI 호출 9 - 수정본 재검수
+    else 사용자 확인 필요
+        SYS->>UI: 사용자 확인 이슈 표시
+        U->>UI: 수정 방향 선택
+        SYS->>PDF: 부분 재생성
+    end
+
+    SYS->>UI: 최종 미리보기 제공
+    U->>UI: 최종 확인
+    UI-->>U: 최종 PDF 제공

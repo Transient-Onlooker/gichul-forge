@@ -1,0 +1,29 @@
+flowchart TD
+    STATUS["처리 상태 패널"]
+
+    A["기출문제 업로드"] -.-> STATUS
+    A5["동의 확인 완료"] -.-> STATUS
+    B6["교육과정 단원 기준 생성"] -.-> STATUS
+    D12["메타데이터 확정"] -.-> STATUS
+    E14["PDF 역할/페이지 범위 표시"] -.-> STATUS
+    G1["문제지 OCR 처리"] -.-> STATUS
+    G2["답지 OCR 처리"] -.-> STATUS
+    H9["문항별 단원 태그 확정"] -.-> STATUS
+    J11["문항 이미지 확정"] -.-> STATUS
+    L11["소단원별 정렬 순서 확정"] -.-> STATUS
+    M10["문제 PDF 생성"] -.-> STATUS
+    N9["답지 페이지 생성"] -.-> STATUS
+    Q2["최종 PDF 생성"] -.-> STATUS
+    S3["최종 PDF 제공"] -.-> STATUS
+
+    STATUS --> S0["0. 업로드 대기"]
+    STATUS --> S1["1. 동의 확인"]
+    STATUS --> S2["2. 파일 분석"]
+    STATUS --> S3A["3. 메타데이터 확인"]
+    STATUS --> S4["4. PDF 역할 판별"]
+    STATUS --> S5["5. OCR 처리"]
+    STATUS --> S6["6. 문항 추출"]
+    STATUS --> S7["7. 단원 태깅"]
+    STATUS --> S8["8. 문제집 생성"]
+    STATUS --> S9["9. 최종 검수"]
+    STATUS --> S10["10. 완료"]
