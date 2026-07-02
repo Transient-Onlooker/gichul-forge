@@ -41,8 +41,8 @@ def workflow() -> dict:
 
 
 @app.get("/api/curriculum")
-def curriculum(subject: str = "수학", grade: str = "고1") -> dict:
-    return {"units": [u.model_dump() for u in curriculum_for(subject, grade)]}
+def curriculum(subject: str = "공통수학1") -> dict:
+    return {"units": [u.model_dump() for u in curriculum_for(subject)]}
 
 
 @app.post("/api/jobs")
@@ -50,7 +50,7 @@ async def create_job(
     background_tasks: BackgroundTasks,
     files: list[UploadFile] = File(...),
     subject: str = Form(...),
-    grade: str = Form("고1"),
+    grade: str | None = Form(None),
     outputMode: str = Form("primary"),
     aiOcrProcessing: bool = Form(False),
     personalDataRisk: bool = Form(False),
@@ -62,7 +62,7 @@ async def create_job(
     consent = ConsentState(aiOcrProcessing=aiOcrProcessing, personalDataRisk=personalDataRisk, storageRetention=storageRetention)
     job = JobSnapshot(
         id=job_id,
-        input=JobInput(subject=subject, grade=grade, outputMode=outputMode, consent=consent, uploadIds=[str(p) for p in saved]),
+        input=JobInput(subject=subject, outputMode=outputMode, consent=consent, uploadIds=[str(p) for p in saved]),
         steps=build_initial_step_states(),
     )
     store.save(job)

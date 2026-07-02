@@ -1,62 +1,66 @@
 from __future__ import annotations
+
 import json
 import sqlite3
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
+
 from ..models import CurriculumUnit
 from ..settings import get_settings
 
 REVISION = "2022"
 SEED_PATH = Path(__file__).resolve().parents[1] / "data" / "curriculum_2022_seed.json"
 
-SCIENCE_ALIASES = ["과학", "통합과학", "물리", "화학", "생명", "지구"]
-MATH_ALIASES = ["수학", "공통수학", "대수", "미적분", "확률", "통계", "기하", "행렬"]
+SUPPORTED_SUBJECTS = ("공통수학1", "공통수학2", "통합과학1", "통합과학2")
+SUBJECT_ALIASES = {
+    "공통수학1": ("공통수학1", "공수1", "공통수학", "수학"),
+    "공통수학2": ("공통수학2", "공수2"),
+    "통합과학1": ("통합과학1", "통과1", "통합과학", "과학"),
+    "통합과학2": ("통합과학2", "통과2"),
+}
+SUBJECT_AREA = {
+    "공통수학1": "math",
+    "공통수학2": "math",
+    "통합과학1": "science",
+    "통합과학2": "science",
+}
 
 
-def subject_area(subject: str) -> str | None:
-    s = subject.replace(" ", "").lower()
-    if any(alias in s for alias in MATH_ALIASES):
-        return "math"
-    if any(alias in s for alias in SCIENCE_ALIASES):
-        return "science"
-    return None
-
-
-def supported_subject(subject: str) -> bool:
-    return subject_area(subject) is not None
+def _compact(text: str) -> str:
+    return text.replace(" ", "").lower()
 
 
 def normalize_subject(subject: str) -> str:
-    compact = subject.replace(" ", "")
-    area = subject_area(subject)
-    if area == "math":
-        if "공통수학2" in compact:
-            return "공통수학2"
-        if "공통수학1" in compact:
-            return "공통수학1"
-        if "대수" in compact:
-            return "대수"
-        if "미적분" in compact:
-            return "미적분Ⅰ"
-        if "확률" in compact or "통계" in compact:
-            return "확률과 통계"
-        if "기하" in compact:
-            return "기하"
+    compact = _compact(subject)
+
+    for canonical in SUPPORTED_SUBJECTS:
+        if compact == _compact(canonical):
+            return canonical
+
+    for canonical, aliases in SUBJECT_ALIASES.items():
+        if any(compact == _compact(alias) for alias in aliases):
+            return canonical
+
+    for canonical, aliases in SUBJECT_ALIASES.items():
+        specific_aliases = [alias for alias in aliases if alias not in {"공통수학", "수학", "통합과학", "과학"}]
+        if any(_compact(alias) in compact for alias in specific_aliases):
+            return canonical
+
+    if "공통수학" in compact or compact == "수학":
         return "공통수학1"
-    if area == "science":
-        if "물리" in compact:
-            return "물리학"
-        if "화학" in compact:
-            return "화학"
-        if "생명" in compact:
-            return "생명과학"
-        if "지구" in compact:
-            return "지구과학"
-        if "통합과학2" in compact:
-            return "통합과학2"
+    if "통합과학" in compact or compact == "과학":
         return "통합과학1"
-    return subject
+
+    return subject.strip()
+
+
+def subject_area(subject: str) -> str | None:
+    return SUBJECT_AREA.get(normalize_subject(subject))
+
+
+def supported_subject(subject: str) -> bool:
+    return normalize_subject(subject) in SUPPORTED_SUBJECTS
 
 
 def _db_path() -> Path:
@@ -178,27 +182,24 @@ def ensure_curriculum_db() -> Path:
     return path
 
 
-def _rows_for(subject: str, grade: str) -> list[sqlite3.Row]:
-    ensure_curriculum_db()
-    area = subject_area(subject) or "math"
+def _rows_for(subject: str) -> list[sqlite3.Row]:
     normalized = normalize_subject(subject)
+    area = SUBJECT_AREA.get(normalized)
+    if not area:
+        return []
+    ensure_curriculum_db()
     with _connect() as conn:
-        rows = conn.execute(
+        return conn.execute(
             """
             SELECT * FROM units
             WHERE revision = ?
               AND subject_area = ?
+              AND course = ?
               AND status IN ('active', 'new', 'transferred')
-              AND (
-                course = ?
-                OR ? IN ('수학', '공통수학1') AND course IN ('공통수학1', '공통수학2')
-                OR ? IN ('과학', '통합과학1') AND course IN ('통합과학1', '통합과학2')
-              )
             ORDER BY sort_order, id
             """,
-            (REVISION, area, normalized, normalized, normalized),
+            (REVISION, area, normalized),
         ).fetchall()
-    return rows
 
 
 def _unit_from_row(row: sqlite3.Row) -> CurriculumUnit:
@@ -218,8 +219,8 @@ def _unit_from_row(row: sqlite3.Row) -> CurriculumUnit:
     )
 
 
-def curriculum_for(subject: str, grade: str) -> list[CurriculumUnit]:
-    rows = _rows_for(subject, grade)
+def curriculum_for(subject: str, grade: str | None = None) -> list[CurriculumUnit]:
+    rows = _rows_for(subject)
     units_by_id = {row["id"]: _unit_from_row(row) for row in rows}
     roots: list[CurriculumUnit] = []
     for row in rows:
@@ -241,8 +242,8 @@ def minor_units(units: list[CurriculumUnit]) -> list[CurriculumUnit]:
         for child in unit.children:
             walk(child)
 
-    for u in units:
-        walk(u)
+    for unit in units:
+        walk(unit)
     return out
 
 
@@ -255,8 +256,8 @@ def confirmation_units(units: list[CurriculumUnit]) -> list[CurriculumUnit]:
         for child in unit.children:
             walk(child)
 
-    for u in units:
-        walk(u)
+    for unit in units:
+        walk(unit)
     return out
 
 
@@ -265,7 +266,7 @@ def legacy_mapping_for_text(subject: str, text: str) -> dict[str, Any] | None:
     area = subject_area(subject)
     if not area:
         return None
-    haystack = text.replace(" ", "").lower()
+    haystack = _compact(text)
     with _connect() as conn:
         rows = conn.execute(
             "SELECT * FROM legacy_mappings WHERE subject_area = ? ORDER BY id",
@@ -273,7 +274,7 @@ def legacy_mapping_for_text(subject: str, text: str) -> dict[str, Any] | None:
         ).fetchall()
     for row in rows:
         terms = [row["legacy_title"], *json.loads(row["legacy_keywords_json"])]
-        if any(term.replace(" ", "").lower() in haystack for term in terms):
+        if any(_compact(term) in haystack for term in terms):
             return {
                 "legacyTitle": row["legacy_title"],
                 "targetUnitId": row["target_unit_id"],

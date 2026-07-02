@@ -12,7 +12,7 @@ def tag_questions_heuristic(questions: list[QuestionRecord], curriculum: list[Cu
         unit = minors[index % len(minors)]
         q.primaryUnitId = unit.id
         q.secondaryUnitIds = [u.id for u in minors if u.id != unit.id][:1]
-        q.tags = unit.tags + unit.keywords[:2]
+        q.tags = unit.keywords[:4]
         q.tagConfidence = 0.74
         q.isLong = (q.questionNumber % 7 == 0)
     return questions
@@ -41,14 +41,15 @@ async def tag_questions_ai(questions: list[QuestionRecord], curriculum: list[Cur
     system = (
         "You map Korean exam questions to the 2022 revised Korean curriculum. "
         "Return JSON only. Choose only active 2022 unit IDs from the provided catalog. "
-        "If text is insufficient, still choose the best unit with low confidence."
+        "If text is insufficient, still choose the best unit with low confidence. "
+        "When you return tags, use short Korean tags only."
     )
     for index, q in enumerate(questions):
         fallback_unit = minors[index % len(minors)]
         fallback = {
             "primaryUnitId": fallback_unit.id,
             "secondaryUnitIds": [],
-            "tags": fallback_unit.tags + fallback_unit.keywords[:2],
+            "tags": fallback_unit.keywords[:4],
             "confidence": 0.55,
             "isLong": q.isLong,
         }

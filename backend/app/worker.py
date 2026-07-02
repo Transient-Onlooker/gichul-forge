@@ -82,10 +82,10 @@ async def run_until_review(job_id: str) -> None:
         if not supported_subject(job.input.subject):
             mark_step(job.steps, "B1", "failed", "과학/수학 과목 아님")
             mark_step(job.steps, "X2", "failed", "지원하지 않는 과목")
-            job.status = "failed"; job.error = "지원 과목은 과학 또는 수학입니다."; store.save(job); return
+            job.status = "failed"; job.error = "지원 과목은 공통수학1, 공통수학2, 통합과학1, 통합과학2입니다."; store.save(job); return
         _finish(job, "B1", "지원 과목")
         _finish(job, "B2", "2022 개정 SQLite 교육과정 DB 조회")
-        job.curriculum = curriculum_for(job.input.subject, job.input.grade)
+        job.curriculum = curriculum_for(job.input.subject)
         _finish(job, "B3", "대단원 로드")
         _finish(job, "B4", "중단원 로드")
         _finish(job, "B5", "소단원 로드")
@@ -132,7 +132,7 @@ async def run_until_review(job_id: str) -> None:
             job.assets.append(asset)
             merged_meta_text += f"\n{pdf.name}\n{first_text[:1200]}"
         first_asset_name = job.assets[0].originalName
-        job.metadata = await metadata_from_text_ai(first_asset_name, merged_meta_text, job.input.subject, job.input.grade)
+        job.metadata = await metadata_from_text_ai(first_asset_name, merged_meta_text, job.input.subject)
         _finish(job, "D4", "학교명 후보 생성")
         _finish(job, "D5", "학년도 후보 생성")
         _finish(job, "D6", "학년 후보 생성")

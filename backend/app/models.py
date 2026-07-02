@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from datetime import datetime, timezone
 from typing import Literal, Optional
+
 from pydantic import BaseModel, Field
 
 WorkflowStatus = Literal["pending", "running", "completed", "failed", "skipped", "needs_review"]
@@ -118,7 +120,6 @@ class IssueRecord(BaseModel):
 
 class JobInput(BaseModel):
     subject: str
-    grade: str
     outputMode: OutputMode = "primary"
     consent: ConsentState
     uploadIds: list[str] = Field(default_factory=list)
@@ -166,4 +167,4 @@ class ContinueRequest(BaseModel):
 
 
 class ResolveIssueRequest(BaseModel):
-    resolution: str = "사용자가 확인함"
+    resolution: str = "사용자 확인"

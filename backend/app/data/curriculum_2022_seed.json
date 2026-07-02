@@ -1,5 +1,5 @@
 {
-  "version": "2022.0.1",
+  "version": "2022.1.0",
   "revision": "2022",
   "units": [
     {
@@ -10,8 +10,8 @@
       "level": "major",
       "title": "공통수학1",
       "sortOrder": 100,
-      "keywords": ["공통수학1", "고1 수학"],
-      "tags": ["math", "common-math-1"]
+      "keywords": ["공통수학1", "다항식", "방정식과 부등식", "경우의 수", "행렬"],
+      "tags": ["common-math-1"]
     },
     {
       "id": "MATH-CM1-POLY",
@@ -22,7 +22,7 @@
       "level": "middle",
       "title": "다항식",
       "sortOrder": 110,
-      "keywords": ["다항식", "인수분해", "나머지정리"],
+      "keywords": ["다항식", "다항식의 연산", "항등식", "나머지정리", "인수분해"],
       "tags": ["polynomial"]
     },
     {
@@ -32,10 +32,34 @@
       "gradeBand": "high",
       "parentId": "MATH-CM1-POLY",
       "level": "minor",
-      "title": "다항식의 연산과 인수분해",
+      "title": "다항식의 연산",
       "sortOrder": 111,
-      "keywords": ["전개", "곱셈공식", "인수분해", "나머지정리"],
-      "tags": ["expand", "factorization", "remainder"]
+      "keywords": ["다항식의 연산", "사칙연산", "덧셈", "뺄셈", "곱셈", "항등식"],
+      "tags": ["polynomial-op"]
+    },
+    {
+      "id": "MATH-CM1-POLY-REMAINDER",
+      "subjectArea": "math",
+      "course": "공통수학1",
+      "gradeBand": "high",
+      "parentId": "MATH-CM1-POLY",
+      "level": "minor",
+      "title": "나머지정리",
+      "sortOrder": 112,
+      "keywords": ["나머지정리", "인수정리", "조립제법", "항등식", "나머지", "몫"],
+      "tags": ["remainder-theorem"]
+    },
+    {
+      "id": "MATH-CM1-POLY-FACTOR",
+      "subjectArea": "math",
+      "course": "공통수학1",
+      "gradeBand": "high",
+      "parentId": "MATH-CM1-POLY",
+      "level": "minor",
+      "title": "인수분해",
+      "sortOrder": 113,
+      "keywords": ["인수분해", "곱셈공식", "세제곱", "삼차식", "공통인수", "완전제곱식"],
+      "tags": ["factorization"]
     },
     {
       "id": "MATH-CM1-EQ",
@@ -46,11 +70,11 @@
       "level": "middle",
       "title": "방정식과 부등식",
       "sortOrder": 120,
-      "keywords": ["방정식", "부등식", "복소수", "이차방정식", "이차부등식"],
-      "tags": ["equation", "inequality"]
+      "keywords": ["방정식과 부등식", "복소수", "이차방정식", "이차함수", "연립방정식", "이차부등식"],
+      "tags": ["equation-inequality"]
     },
     {
-      "id": "MATH-CM1-EQ-QUAD",
+      "id": "MATH-CM1-EQ-COMPLEX",
       "subjectArea": "math",
       "course": "공통수학1",
       "gradeBand": "high",
@@ -58,20 +82,32 @@
       "level": "minor",
       "title": "복소수와 이차방정식",
       "sortOrder": 121,
-      "keywords": ["복소수", "허수", "판별식", "근의 공식", "이차방정식"],
-      "tags": ["complex", "quadratic-equation"]
+      "keywords": ["복소수", "허수", "허수단위", "켤레복소수", "판별식", "이차방정식"],
+      "tags": ["complex-quadratic"]
     },
     {
-      "id": "MATH-CM1-EQ-INEQ",
+      "id": "MATH-CM1-EQ-QUADFUNC",
+      "subjectArea": "math",
+      "course": "공통수학1",
+      "gradeBand": "high",
+      "parentId": "MATH-CM1-EQ",
+      "level": "minor",
+      "title": "이차방정식과 이차함수",
+      "sortOrder": 122,
+      "keywords": ["이차방정식", "이차함수", "근과 계수", "최대", "최소", "직선의 위치 관계"],
+      "tags": ["quadratic-function"]
+    },
+    {
+      "id": "MATH-CM1-EQ-MULTI",
       "subjectArea": "math",
       "course": "공통수학1",
       "gradeBand": "high",
       "parentId": "MATH-CM1-EQ",
       "level": "minor",
       "title": "여러 가지 방정식과 부등식",
-      "sortOrder": 122,
-      "keywords": ["연립방정식", "부등식", "이차부등식", "절댓값"],
-      "tags": ["equation", "inequality"]
+      "sortOrder": 123,
+      "keywords": ["삼차방정식", "사차방정식", "연립이차방정식", "연립일차부등식", "절댓값", "이차부등식", "연립이차부등식"],
+      "tags": ["mixed-equation"]
     },
     {
       "id": "MATH-CM1-COUNT",
@@ -82,20 +118,32 @@
       "level": "middle",
       "title": "경우의 수",
       "sortOrder": 130,
-      "keywords": ["경우의 수", "순열", "조합"],
+      "keywords": ["경우의 수", "합의 법칙", "곱의 법칙", "순열", "조합", "계승"],
       "tags": ["counting"]
     },
     {
-      "id": "MATH-CM1-COUNT-COUNTING",
+      "id": "MATH-CM1-COUNT-LAWS",
       "subjectArea": "math",
       "course": "공통수학1",
       "gradeBand": "high",
       "parentId": "MATH-CM1-COUNT",
       "level": "minor",
-      "title": "경우의 수와 순열·조합",
+      "title": "합의 법칙과 곱의 법칙",
       "sortOrder": 131,
-      "keywords": ["합의 법칙", "곱의 법칙", "순열", "조합"],
-      "tags": ["permutation", "combination"]
+      "keywords": ["합의 법칙", "곱의 법칙", "수형도", "사건", "분류", "경우의 수"],
+      "tags": ["counting-law"]
+    },
+    {
+      "id": "MATH-CM1-COUNT-PC",
+      "subjectArea": "math",
+      "course": "공통수학1",
+      "gradeBand": "high",
+      "parentId": "MATH-CM1-COUNT",
+      "level": "minor",
+      "title": "순열과 조합",
+      "sortOrder": 132,
+      "keywords": ["순열", "조합", "계승", "배열", "선택", "순서"],
+      "tags": ["permutation-combination"]
     },
     {
       "id": "MATH-CM1-MATRIX",
@@ -107,9 +155,9 @@
       "title": "행렬",
       "status": "new",
       "requiresConfirmation": true,
-      "sourceNote": "2022 개정에서 공통수학1 쪽으로 재도입된 단원입니다. 예전 기출의 행렬 문항은 난도와 출제 의도를 확인한 뒤 포함 여부를 결정하세요.",
+      "sourceNote": "22개정 공통수학1에서 행렬이 다시 포함되었습니다. 예전 기출의 행렬 문항은 공통수학 수준에 맞는지 확인한 뒤 포함하는 것이 안전합니다.",
       "sortOrder": 140,
-      "keywords": ["행렬", "행렬의 연산"],
+      "keywords": ["행렬", "행과 열", "성분", "행렬의 뜻", "행렬의 연산"],
       "tags": ["matrix"]
     },
     {
@@ -119,13 +167,10 @@
       "gradeBand": "high",
       "parentId": "MATH-CM1-MATRIX",
       "level": "minor",
-      "title": "행렬과 행렬의 연산",
-      "status": "new",
-      "requiresConfirmation": true,
-      "sourceNote": "예전 교육과정의 행렬 문항을 2022 개정 공통수학1 기준으로 재배치할 때 사용자 확인이 필요합니다.",
+      "title": "행렬과 그 연산",
       "sortOrder": 141,
-      "keywords": ["행렬", "덧셈", "실수배", "곱셈"],
-      "tags": ["matrix", "matrix-operation"]
+      "keywords": ["행렬", "행렬의 연산", "덧셈", "뺄셈", "실수배", "곱셈", "행", "열", "성분"],
+      "tags": ["matrix-op"]
     },
     {
       "id": "MATH-CM2",
@@ -135,8 +180,8 @@
       "level": "major",
       "title": "공통수학2",
       "sortOrder": 200,
-      "keywords": ["공통수학2", "고1 수학"],
-      "tags": ["math", "common-math-2"]
+      "keywords": ["공통수학2", "도형의 방정식", "집합과 명제", "함수와 그래프"],
+      "tags": ["common-math-2"]
     },
     {
       "id": "MATH-CM2-GEOM",
@@ -147,8 +192,8 @@
       "level": "middle",
       "title": "도형의 방정식",
       "sortOrder": 210,
-      "keywords": ["평면좌표", "직선의 방정식", "원의 방정식", "도형의 이동"],
-      "tags": ["analytic-geometry"]
+      "keywords": ["도형의 방정식", "평면좌표", "직선의 방정식", "원의 방정식", "도형의 이동"],
+      "tags": ["geometry-equation"]
     },
     {
       "id": "MATH-CM2-GEOM-COORD",
@@ -157,10 +202,46 @@
       "gradeBand": "high",
       "parentId": "MATH-CM2-GEOM",
       "level": "minor",
-      "title": "평면좌표와 도형의 방정식",
+      "title": "평면좌표",
       "sortOrder": 211,
-      "keywords": ["좌표", "직선", "원", "부등식의 영역"],
-      "tags": ["coordinate", "line", "circle"]
+      "keywords": ["평면좌표", "두 점 사이의 거리", "내분점", "좌표평면", "좌표 계산"],
+      "tags": ["coordinate"]
+    },
+    {
+      "id": "MATH-CM2-GEOM-LINE",
+      "subjectArea": "math",
+      "course": "공통수학2",
+      "gradeBand": "high",
+      "parentId": "MATH-CM2-GEOM",
+      "level": "minor",
+      "title": "직선의 방정식",
+      "sortOrder": 212,
+      "keywords": ["직선의 방정식", "평행", "수직", "점과 직선 사이의 거리", "기울기"],
+      "tags": ["line-equation"]
+    },
+    {
+      "id": "MATH-CM2-GEOM-CIRCLE",
+      "subjectArea": "math",
+      "course": "공통수학2",
+      "gradeBand": "high",
+      "parentId": "MATH-CM2-GEOM",
+      "level": "minor",
+      "title": "원의 방정식",
+      "sortOrder": 213,
+      "keywords": ["원의 방정식", "반지름", "중심", "원과 직선의 위치 관계", "그래프"],
+      "tags": ["circle-equation"]
+    },
+    {
+      "id": "MATH-CM2-GEOM-MOVE",
+      "subjectArea": "math",
+      "course": "공통수학2",
+      "gradeBand": "high",
+      "parentId": "MATH-CM2-GEOM",
+      "level": "minor",
+      "title": "도형의 이동",
+      "sortOrder": 214,
+      "keywords": ["도형의 이동", "평행이동", "대칭이동", "원점 대칭", "축 대칭", "직선 대칭"],
+      "tags": ["transform"]
     },
     {
       "id": "MATH-CM2-LOGIC",
@@ -171,8 +252,8 @@
       "level": "middle",
       "title": "집합과 명제",
       "sortOrder": 220,
-      "keywords": ["집합", "명제", "조건", "증명"],
-      "tags": ["set", "logic"]
+      "keywords": ["집합과 명제", "집합", "명제", "조건", "증명", "절대부등식"],
+      "tags": ["set-logic"]
     },
     {
       "id": "MATH-CM2-LOGIC-SET",
@@ -181,10 +262,22 @@
       "gradeBand": "high",
       "parentId": "MATH-CM2-LOGIC",
       "level": "minor",
-      "title": "집합과 명제",
+      "title": "집합",
       "sortOrder": 221,
-      "keywords": ["집합", "명제", "충분조건", "필요조건"],
-      "tags": ["set", "proposition"]
+      "keywords": ["집합", "원소", "부분집합", "합집합", "교집합", "여집합", "벤다이어그램"],
+      "tags": ["set"]
+    },
+    {
+      "id": "MATH-CM2-LOGIC-PROP",
+      "subjectArea": "math",
+      "course": "공통수학2",
+      "gradeBand": "high",
+      "parentId": "MATH-CM2-LOGIC",
+      "level": "minor",
+      "title": "명제",
+      "sortOrder": 222,
+      "keywords": ["명제", "조건", "역", "대우", "충분조건", "필요조건", "귀류법", "절대부등식"],
+      "tags": ["proposition"]
     },
     {
       "id": "MATH-CM2-FUNCTION",
@@ -195,20 +288,32 @@
       "level": "middle",
       "title": "함수와 그래프",
       "sortOrder": 230,
-      "keywords": ["함수", "그래프", "합성함수", "역함수", "유리함수", "무리함수"],
+      "keywords": ["함수와 그래프", "함수", "합성함수", "역함수", "유리함수", "무리함수"],
       "tags": ["function"]
     },
     {
-      "id": "MATH-CM2-FUNCTION-GRAPH",
+      "id": "MATH-CM2-FUNCTION-BASIC",
       "subjectArea": "math",
       "course": "공통수학2",
       "gradeBand": "high",
       "parentId": "MATH-CM2-FUNCTION",
       "level": "minor",
-      "title": "함수와 그래프",
+      "title": "함수",
       "sortOrder": 231,
-      "keywords": ["함수", "합성함수", "역함수", "유리함수", "무리함수"],
-      "tags": ["function", "graph"]
+      "keywords": ["함수", "정의역", "치역", "공역", "합성함수", "역함수", "일대일대응"],
+      "tags": ["function-basic"]
+    },
+    {
+      "id": "MATH-CM2-FUNCTION-RADICAL",
+      "subjectArea": "math",
+      "course": "공통수학2",
+      "gradeBand": "high",
+      "parentId": "MATH-CM2-FUNCTION",
+      "level": "minor",
+      "title": "유리함수와 무리함수",
+      "sortOrder": 232,
+      "keywords": ["유리함수", "무리함수", "점근선", "그래프의 성질", "유리식", "무리식"],
+      "tags": ["rational-radical"]
     },
     {
       "id": "SCI-IS1",
@@ -218,8 +323,8 @@
       "level": "major",
       "title": "통합과학1",
       "sortOrder": 500,
-      "keywords": ["통합과학1", "고등학교 과학"],
-      "tags": ["science", "integrated-science-1"]
+      "keywords": ["통합과학1", "과학의 기초", "물질과 규칙성", "시스템과 상호작용"],
+      "tags": ["integrated-science-1"]
     },
     {
       "id": "SCI-IS1-NATURE",
@@ -230,20 +335,44 @@
       "level": "middle",
       "title": "과학의 기초",
       "sortOrder": 510,
-      "keywords": ["과학 탐구", "측정", "자료 해석"],
-      "tags": ["inquiry"]
+      "keywords": ["과학의 기초", "기본량과 단위", "측정과 어림", "정보와 신호", "과학 탐구"],
+      "tags": ["science-basic"]
     },
     {
-      "id": "SCI-IS1-NATURE-INQUIRY",
+      "id": "SCI-IS1-NATURE-QUANTITY",
       "subjectArea": "science",
       "course": "통합과학1",
       "gradeBand": "high",
       "parentId": "SCI-IS1-NATURE",
       "level": "minor",
-      "title": "과학 탐구와 자료 해석",
+      "title": "기본량과 단위",
       "sortOrder": 511,
-      "keywords": ["탐구", "변인", "그래프", "자료"],
-      "tags": ["inquiry", "data"]
+      "keywords": ["기본량과 단위", "길이", "시간", "질량", "전류", "온도", "단위"],
+      "tags": ["quantity-unit"]
+    },
+    {
+      "id": "SCI-IS1-NATURE-MEASURE",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-NATURE",
+      "level": "minor",
+      "title": "측정과 어림",
+      "sortOrder": 512,
+      "keywords": ["측정과 어림", "측정 표준", "오차", "시공간", "규모", "비교", "어림"],
+      "tags": ["measurement"]
+    },
+    {
+      "id": "SCI-IS1-NATURE-SIGNAL",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-NATURE",
+      "level": "minor",
+      "title": "정보와 신호",
+      "sortOrder": 513,
+      "keywords": ["정보와 신호", "센서", "디지털", "신호 변환", "정보 통신", "데이터"],
+      "tags": ["signal"]
     },
     {
       "id": "SCI-IS1-MATTER",
@@ -254,8 +383,32 @@
       "level": "middle",
       "title": "물질과 규칙성",
       "sortOrder": 520,
-      "keywords": ["원소", "주기율", "화학 결합", "물질"],
-      "tags": ["matter"]
+      "keywords": ["물질과 규칙성", "원소 형성", "별의 진화", "원소의 주기성", "화학 결합", "물질의 전기적 성질"],
+      "tags": ["matter-rule"]
+    },
+    {
+      "id": "SCI-IS1-MATTER-ELEMENT",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-MATTER",
+      "level": "minor",
+      "title": "원소 형성",
+      "sortOrder": 521,
+      "keywords": ["원소 형성", "우주 초기", "수소", "헬륨", "스펙트럼", "천체"],
+      "tags": ["element-formation"]
+    },
+    {
+      "id": "SCI-IS1-MATTER-STAR",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-MATTER",
+      "level": "minor",
+      "title": "별의 진화",
+      "sortOrder": 522,
+      "keywords": ["별의 진화", "핵융합", "원소 생성", "초신성", "태양계", "우주 역사"],
+      "tags": ["star-evolution"]
     },
     {
       "id": "SCI-IS1-MATTER-PERIODIC",
@@ -264,10 +417,46 @@
       "gradeBand": "high",
       "parentId": "SCI-IS1-MATTER",
       "level": "minor",
-      "title": "원소와 화학 결합",
-      "sortOrder": 521,
-      "keywords": ["원소", "주기율표", "이온 결합", "공유 결합"],
-      "tags": ["periodic-table", "chemical-bond"]
+      "title": "원소의 주기성",
+      "sortOrder": 523,
+      "keywords": ["원소의 주기성", "주기율표", "주기율", "족", "원자가전자", "규칙성"],
+      "tags": ["periodicity"]
+    },
+    {
+      "id": "SCI-IS1-MATTER-BOND",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-MATTER",
+      "level": "minor",
+      "title": "이온 결합과 공유 결합",
+      "sortOrder": 524,
+      "keywords": ["이온 결합", "공유 결합", "물", "산소", "소금", "화학 결합"],
+      "tags": ["bond"]
+    },
+    {
+      "id": "SCI-IS1-MATTER-MATERIAL",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-MATTER",
+      "level": "minor",
+      "title": "지각과 생명체 구성 물질의 규칙성",
+      "sortOrder": 525,
+      "keywords": ["지각과 생명체 구성 물질의 규칙성", "규산염 광물", "단백질", "핵산", "기본 단위체"],
+      "tags": ["material-rule"]
+    },
+    {
+      "id": "SCI-IS1-MATTER-ELECTRIC",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-MATTER",
+      "level": "minor",
+      "title": "물질의 전기적 성질",
+      "sortOrder": 526,
+      "keywords": ["물질의 전기적 성질", "도체", "부도체", "반도체", "전기 전도성", "소재"],
+      "tags": ["electric-property"]
     },
     {
       "id": "SCI-IS1-SYSTEM",
@@ -279,25 +468,94 @@
       "title": "시스템과 상호작용",
       "status": "transferred",
       "requiresConfirmation": true,
-      "sourceNote": "기존 물리학Ⅰ·생명과학Ⅰ·지구과학Ⅰ의 일부 관점이 통합과학 맥락으로 재배치될 수 있어 사용자 확인이 필요합니다.",
+      "sourceNote": "물리학, 생명과학, 지구과학 계열의 일부 개념이 통합과학1로 재배치됩니다. 예전 기출은 통합과학 수준으로 다룰 수 있는지 먼저 확인하세요.",
       "sortOrder": 530,
-      "keywords": ["시스템", "상호작용", "힘", "에너지", "생명 시스템"],
-      "tags": ["system"]
+      "keywords": ["시스템과 상호작용", "지구시스템", "판구조론", "중력장", "충격량", "운동량", "생명 시스템", "유전자"],
+      "tags": ["system-interaction"]
     },
     {
-      "id": "SCI-IS1-SYSTEM-FORCE",
+      "id": "SCI-IS1-SYSTEM-EARTH",
       "subjectArea": "science",
       "course": "통합과학1",
       "gradeBand": "high",
       "parentId": "SCI-IS1-SYSTEM",
       "level": "minor",
-      "title": "힘과 에너지 시스템",
-      "status": "transferred",
-      "requiresConfirmation": true,
-      "sourceNote": "물리학Ⅰ의 힘과 에너지 문항 중 통합과학 수준으로 처리 가능한 문항만 포함해야 합니다.",
+      "title": "지구시스템의 구성과 상호작용",
       "sortOrder": 531,
-      "keywords": ["힘", "운동", "에너지", "역학적 시스템"],
-      "tags": ["force", "energy", "system"]
+      "keywords": ["지구시스템", "기권", "수권", "지권", "생물권", "물질 순환", "에너지 흐름"],
+      "tags": ["earth-system"]
+    },
+    {
+      "id": "SCI-IS1-SYSTEM-TECTONIC",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-SYSTEM",
+      "level": "minor",
+      "title": "판구조론과 지각 변동",
+      "sortOrder": 532,
+      "keywords": ["판구조론", "지각 변동", "지진", "화산", "판 이동", "지권 변화"],
+      "tags": ["tectonics"]
+    },
+    {
+      "id": "SCI-IS1-SYSTEM-GRAVITY",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-SYSTEM",
+      "level": "minor",
+      "title": "중력장 내의 운동",
+      "sortOrder": 533,
+      "keywords": ["중력장 내의 운동", "자유 낙하", "공전", "원운동", "중력", "가속도"],
+      "tags": ["gravity"]
+    },
+    {
+      "id": "SCI-IS1-SYSTEM-MOMENTUM",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-SYSTEM",
+      "level": "minor",
+      "title": "충격량과 운동량",
+      "sortOrder": 534,
+      "keywords": ["충격량", "운동량", "충돌", "안전장치", "관성", "스포츠"],
+      "tags": ["momentum"]
+    },
+    {
+      "id": "SCI-IS1-SYSTEM-CELL",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-SYSTEM",
+      "level": "minor",
+      "title": "생명 시스템의 기본 단위",
+      "sortOrder": 535,
+      "keywords": ["생명 시스템의 기본 단위", "세포", "세포막", "선택적 투과", "생명 현상"],
+      "tags": ["cell"]
+    },
+    {
+      "id": "SCI-IS1-SYSTEM-METABOLISM",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-SYSTEM",
+      "level": "minor",
+      "title": "물질대사",
+      "sortOrder": 536,
+      "keywords": ["물질대사", "효소", "화학 반응", "세포호흡", "광합성", "물질 출입"],
+      "tags": ["metabolism"]
+    },
+    {
+      "id": "SCI-IS1-SYSTEM-GENE",
+      "subjectArea": "science",
+      "course": "통합과학1",
+      "gradeBand": "high",
+      "parentId": "SCI-IS1-SYSTEM",
+      "level": "minor",
+      "title": "유전자와 단백질",
+      "sortOrder": 537,
+      "keywords": ["유전자와 단백질", "전사", "번역", "유전물질", "단백질 합성", "정보 흐름"],
+      "tags": ["gene-protein"]
     },
     {
       "id": "SCI-IS2",
@@ -307,8 +565,8 @@
       "level": "major",
       "title": "통합과학2",
       "sortOrder": 600,
-      "keywords": ["통합과학2", "고등학교 과학"],
-      "tags": ["science", "integrated-science-2"]
+      "keywords": ["통합과학2", "변화와 다양성", "환경과 에너지", "과학과 미래 사회"],
+      "tags": ["integrated-science-2"]
     },
     {
       "id": "SCI-IS2-CHANGE",
@@ -319,20 +577,80 @@
       "level": "middle",
       "title": "변화와 다양성",
       "sortOrder": 610,
-      "keywords": ["화학 변화", "생물 다양성", "진화", "지질 시대"],
-      "tags": ["change", "diversity"]
+      "keywords": ["변화와 다양성", "지질시대", "생물다양성", "자연선택", "산화와 환원", "산성과 염기성", "중화 반응", "에너지 출입"],
+      "tags": ["change-diversity"]
     },
     {
-      "id": "SCI-IS2-CHANGE-DIVERSITY",
+      "id": "SCI-IS2-CHANGE-GEO",
       "subjectArea": "science",
       "course": "통합과학2",
       "gradeBand": "high",
       "parentId": "SCI-IS2-CHANGE",
       "level": "minor",
-      "title": "화학 변화와 생물 다양성",
+      "title": "지질시대의 생물과 화석",
       "sortOrder": 611,
-      "keywords": ["산화 환원", "산과 염기", "생물 다양성", "자연 선택"],
-      "tags": ["chemical-change", "biodiversity"]
+      "keywords": ["지질시대", "생물과 화석", "지층", "대멸종", "환경 변화", "지구 역사"],
+      "tags": ["geologic-era"]
+    },
+    {
+      "id": "SCI-IS2-CHANGE-EVOLUTION",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-CHANGE",
+      "level": "minor",
+      "title": "자연선택과 생물다양성",
+      "sortOrder": 612,
+      "keywords": ["자연선택", "변이", "진화", "생물다양성", "적응", "개체군"],
+      "tags": ["evolution"]
+    },
+    {
+      "id": "SCI-IS2-CHANGE-OXRED",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-CHANGE",
+      "level": "minor",
+      "title": "산화와 환원",
+      "sortOrder": 613,
+      "keywords": ["산화와 환원", "산화", "환원", "산소 이동", "전자 이동", "철의 제련"],
+      "tags": ["oxidation-reduction"]
+    },
+    {
+      "id": "SCI-IS2-CHANGE-ACIDBASE",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-CHANGE",
+      "level": "minor",
+      "title": "산성과 염기성",
+      "sortOrder": 614,
+      "keywords": ["산성과 염기성", "산", "염기", "지시약", "아레니우스", "용액"],
+      "tags": ["acid-base"]
+    },
+    {
+      "id": "SCI-IS2-CHANGE-NEUTRAL",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-CHANGE",
+      "level": "minor",
+      "title": "중화 반응",
+      "sortOrder": 615,
+      "keywords": ["중화 반응", "산과 염기", "온도 변화", "중화", "염", "생활 속 중화"],
+      "tags": ["neutralization"]
+    },
+    {
+      "id": "SCI-IS2-CHANGE-ENERGY",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-CHANGE",
+      "level": "minor",
+      "title": "물질 변화에서 에너지 출입",
+      "sortOrder": 616,
+      "keywords": ["물질 변화에서 에너지 출입", "흡열", "발열", "에너지 흡수", "에너지 방출", "화학 변화"],
+      "tags": ["reaction-energy"]
     },
     {
       "id": "SCI-IS2-ENV",
@@ -342,12 +660,36 @@
       "parentId": "SCI-IS2",
       "level": "middle",
       "title": "환경과 에너지",
-      "status": "new",
+      "status": "transferred",
       "requiresConfirmation": true,
-      "sourceNote": "기후·에너지·지속가능성 문항은 2022 개정에서 강조된 맥락과 맞는지 사용자 확인 후 포함하는 것이 안전합니다.",
+      "sourceNote": "기후, 발전, 지속가능성 관련 예전 기출은 22개정 통합과학2의 문맥과 수준에 맞는지 확인한 뒤 포함하는 편이 안전합니다.",
       "sortOrder": 620,
-      "keywords": ["환경", "에너지", "기후 변화", "지속가능성"],
-      "tags": ["environment", "energy"]
+      "keywords": ["환경과 에너지", "생태계", "생태계 평형", "온실기체", "지구온난화", "핵융합", "발전", "에너지 전환", "에너지 효율"],
+      "tags": ["environment-energy"]
+    },
+    {
+      "id": "SCI-IS2-ENV-ECOSYSTEM",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-ENV",
+      "level": "minor",
+      "title": "생태계 구성 요소",
+      "sortOrder": 621,
+      "keywords": ["생태계 구성 요소", "생물과 환경", "생태계", "비생물 요인", "상호 관계"],
+      "tags": ["ecosystem"]
+    },
+    {
+      "id": "SCI-IS2-ENV-BALANCE",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-ENV",
+      "level": "minor",
+      "title": "생태계 평형",
+      "sortOrder": 622,
+      "keywords": ["생태계 평형", "먹이 관계", "생태 피라미드", "개체군", "군집", "평형"],
+      "tags": ["ecosystem-balance"]
     },
     {
       "id": "SCI-IS2-ENV-CLIMATE",
@@ -356,55 +698,203 @@
       "gradeBand": "high",
       "parentId": "SCI-IS2-ENV",
       "level": "minor",
-      "title": "기후 변화와 에너지",
+      "title": "대기와 해양의 상호작용",
+      "sortOrder": 623,
+      "keywords": ["대기와 해양의 상호작용", "엘니뇨", "사막화", "기후시스템", "해양", "대기"],
+      "tags": ["climate-system"]
+    },
+    {
+      "id": "SCI-IS2-ENV-WARMING",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-ENV",
+      "level": "minor",
+      "title": "온실기체와 지구온난화",
+      "sortOrder": 624,
+      "keywords": ["온실기체와 지구온난화", "온실효과", "지구온난화", "이산화탄소", "탄소 중립", "기후변화"],
+      "tags": ["global-warming"]
+    },
+    {
+      "id": "SCI-IS2-ENV-FUSION",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-ENV",
+      "level": "minor",
+      "title": "핵융합",
+      "sortOrder": 625,
+      "keywords": ["핵융합", "태양", "질량 결손", "태양 에너지", "수소", "헬륨"],
+      "tags": ["fusion"]
+    },
+    {
+      "id": "SCI-IS2-ENV-POWER",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-ENV",
+      "level": "minor",
+      "title": "발전",
+      "sortOrder": 626,
+      "keywords": ["발전", "발전기", "전자기 유도", "화석 연료", "핵에너지", "전기 에너지"],
+      "tags": ["power-generation"]
+    },
+    {
+      "id": "SCI-IS2-ENV-EFFICIENCY",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-ENV",
+      "level": "minor",
+      "title": "에너지 전환과 효율",
+      "sortOrder": 627,
+      "keywords": ["에너지 전환과 효율", "에너지 효율", "신재생 에너지", "지속가능한 발전", "열에너지", "에너지 보존"],
+      "tags": ["energy-efficiency"]
+    },
+    {
+      "id": "SCI-IS2-FUTURE",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2",
+      "level": "middle",
+      "title": "과학과 미래 사회",
       "status": "new",
       "requiresConfirmation": true,
-      "sourceNote": "예전 지구과학·물리·화학 기출의 일부가 이 단원으로 내려오거나 통합될 수 있습니다.",
-      "sortOrder": 621,
-      "keywords": ["기후 변화", "탄소 중립", "발전", "재생 에너지"],
-      "tags": ["climate", "renewable-energy"]
+      "sourceNote": "감염병, 인공지능, 로봇, 과학 윤리 관련 문항은 22개정 통합과학2의 범위로 포함할지 먼저 확인하세요.",
+      "sortOrder": 630,
+      "keywords": ["과학과 미래 사회", "감염병과 병원체", "인공지능과 과학 탐구", "로봇", "과학기술과 윤리"],
+      "tags": ["future-society"]
+    },
+    {
+      "id": "SCI-IS2-FUTURE-DISEASE",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-FUTURE",
+      "level": "minor",
+      "title": "감염병과 병원체",
+      "sortOrder": 631,
+      "keywords": ["감염병과 병원체", "진단", "추적", "핵산", "단백질", "병원체"],
+      "tags": ["disease"]
+    },
+    {
+      "id": "SCI-IS2-FUTURE-AI",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-FUTURE",
+      "level": "minor",
+      "title": "인공지능과 과학 탐구",
+      "sortOrder": 632,
+      "keywords": ["인공지능과 과학 탐구", "빅데이터", "디지털 탐구 도구", "데이터 분석", "과학기술사회"],
+      "tags": ["ai-science"]
+    },
+    {
+      "id": "SCI-IS2-FUTURE-ROBOT",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-FUTURE",
+      "level": "minor",
+      "title": "로봇",
+      "sortOrder": 633,
+      "keywords": ["로봇", "인공지능 로봇", "사물인터넷", "자동화", "미래 사회", "생활 개선"],
+      "tags": ["robot"]
+    },
+    {
+      "id": "SCI-IS2-FUTURE-ETHICS",
+      "subjectArea": "science",
+      "course": "통합과학2",
+      "gradeBand": "high",
+      "parentId": "SCI-IS2-FUTURE",
+      "level": "minor",
+      "title": "과학기술과 윤리",
+      "sortOrder": 634,
+      "keywords": ["과학기술과 윤리", "과학 윤리", "사회적 쟁점", "책임 있는 활용", "가치 판단", "과학기술"],
+      "tags": ["ethics"]
     }
   ],
   "legacyMappings": [
     {
       "subjectArea": "math",
       "legacyTitle": "행렬",
-      "legacyKeywords": ["행렬의 곱", "역행렬"],
-      "targetUnitId": "MATH-CM1-MATRIX-OPS",
+      "legacyKeywords": ["행렬의 곱", "행렬의 덧셈", "행렬의 연산"],
+      "targetUnitId": "MATH-CM1-MATRIX",
       "action": "confirm",
-      "note": "행렬은 2022 개정 공통수학1에 재도입된 단원으로 취급하되, 예전 기출 난도와 범위 확인이 필요합니다."
+      "note": "행렬은 22개정 공통수학1에서 다시 포함된 단원입니다. 예전 기출은 공통수학 수준인지 확인 후 배치하세요."
     },
     {
       "subjectArea": "math",
-      "legacyTitle": "수열의 극한",
-      "legacyKeywords": ["무한수열", "급수", "극한"],
+      "legacyTitle": "부등식의 영역",
+      "legacyKeywords": ["연립부등식의 영역", "영역 표시"],
       "targetUnitId": null,
       "action": "exclude",
-      "note": "선택 과목 수준으로 분류되는 문항은 공통수학 기준 문제집에서 제외합니다."
+      "note": "현재 공통수학2의 내용 체계에는 포함되지 않는 옛 교육과정 요소라서 제외합니다."
+    },
+    {
+      "subjectArea": "math",
+      "legacyTitle": "수열",
+      "legacyKeywords": ["등차수열", "등비수열", "수열의 합", "점화식"],
+      "targetUnitId": null,
+      "action": "exclude",
+      "note": "선택 과목 또는 다른 영역 수준의 수열 문항은 공통수학 기준 문제집에서 제외합니다."
+    },
+    {
+      "subjectArea": "math",
+      "legacyTitle": "지수와 로그",
+      "legacyKeywords": ["지수함수", "로그함수", "로그", "지수"],
+      "targetUnitId": null,
+      "action": "exclude",
+      "note": "공통수학1, 공통수학2 범위를 벗어나므로 제외합니다."
+    },
+    {
+      "subjectArea": "math",
+      "legacyTitle": "미분과 적분",
+      "legacyKeywords": ["미분", "도함수", "적분", "부정적분", "정적분"],
+      "targetUnitId": null,
+      "action": "exclude",
+      "note": "공통 과목 범위를 넘는 문항은 생성 대상에서 제외합니다."
     },
     {
       "subjectArea": "science",
       "legacyTitle": "역학적 시스템",
-      "legacyKeywords": ["뉴턴 운동 법칙", "운동량", "역학적 에너지"],
-      "targetUnitId": "SCI-IS1-SYSTEM-FORCE",
+      "legacyKeywords": ["뉴턴 운동 법칙", "운동량", "충격량", "자유 낙하"],
+      "targetUnitId": "SCI-IS1-SYSTEM",
       "action": "confirm",
-      "note": "물리학Ⅰ 문항 중 통합과학 수준으로 내려온 문항인지 사용자 확인이 필요합니다."
+      "note": "물리학 계열 기출이 통합과학1 수준으로 재배치 가능한지 사용자 확인이 필요합니다."
     },
     {
       "subjectArea": "science",
       "legacyTitle": "기후 변화와 에너지",
-      "legacyKeywords": ["지구 온난화", "탄소 중립", "신재생 에너지"],
-      "targetUnitId": "SCI-IS2-ENV-CLIMATE",
+      "legacyKeywords": ["지구 온난화", "탄소 중립", "발전", "신재생 에너지"],
+      "targetUnitId": "SCI-IS2-ENV",
       "action": "confirm",
-      "note": "2022 개정 통합과학2의 환경과 에너지 맥락에 맞는지 확인 후 포함합니다."
+      "note": "환경과 에너지 문항은 22개정 통합과학2 맥락에 맞는지 확인 후 포함합니다."
+    },
+    {
+      "subjectArea": "science",
+      "legacyTitle": "인공지능과 로봇",
+      "legacyKeywords": ["빅데이터", "인공지능", "로봇", "사물인터넷"],
+      "targetUnitId": "SCI-IS2-FUTURE",
+      "action": "confirm",
+      "note": "과학과 미래 사회 영역은 22개정의 성격이 강하므로 포함 여부를 한 번 더 확인합니다."
     },
     {
       "subjectArea": "science",
       "legacyTitle": "고급 물리 계산",
-      "legacyKeywords": ["등가속도 운동", "전자기 유도 정량 계산", "단진동"],
+      "legacyKeywords": ["등가속도 운동", "전자기 유도 정량 계산", "단진동", "열역학 과정"],
       "targetUnitId": null,
       "action": "exclude",
-      "note": "통합과학 범위를 벗어나는 심화 계산 문항은 제외합니다."
+      "note": "통합과학 범위를 넘어서는 심화 계산 문항은 제외합니다."
+    },
+    {
+      "subjectArea": "science",
+      "legacyTitle": "열화학 반응식",
+      "legacyKeywords": ["엔탈피", "열화학 반응식", "산화수"],
+      "targetUnitId": null,
+      "action": "exclude",
+      "note": "22개정 통합과학2에서 다루지 않는 심화 화학 표현은 제외합니다."
     }
   ]
 }
