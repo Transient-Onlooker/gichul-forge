@@ -2,7 +2,7 @@
 
 기출 PDF/ZIP을 업로드하면 과목·교육과정 기준으로 문항을 분리하고, NVIDIA NIM 기반 OCR/비전/태깅을 거쳐 단원별 문제 모음집 PDF를 생성하는 웹서비스입니다.
 
-현재 구조는 **Next.js/React/TypeScript 프론트엔드 + Python/FastAPI 백엔드**로 구성되어 있습니다.
+현재 구조는 **Next.js/React/TypeScript 프론트엔드 + Python/FastAPI 백엔드**입니다.
 
 ## 주요 기능
 
@@ -13,6 +13,17 @@
 - 단원별 재배치와 문제/답지 PDF 생성
 - 사용자 확인이 필요한 항목을 위한 검수 큐
 - 워크플로 상태 추적 및 Mermaid 설계 문서
+
+## 개발 기준
+
+- Node.js 24+
+- pnpm 12.8.1
+- Python 3.14
+- Next.js 16.3.8
+- React 19.3
+- FastAPI 0.141
+
+프런트엔드는 pnpm 하나만 사용하며 `frontend/pnpm-lock.yaml`을 기준으로 재현 가능한 설치를 합니다.
 
 ## 빠른 실행
 
@@ -26,7 +37,7 @@ docker compose up --build
 - 프론트엔드: http://localhost:3000
 - 백엔드 API 문서: http://localhost:8000/docs
 
-Windows에서는 루트의 `run.bat`으로 로컬 개발 서버를 시작할 수 있습니다.
+Windows에서는 루트의 `run.bat`으로 개발 서버를 시작할 수 있습니다.
 
 ## 로컬 개발
 
@@ -36,7 +47,8 @@ Windows에서는 루트의 `run.bat`으로 로컬 개발 서버를 시작할 수
 cd backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 cp ../.env.local.example ../.env.local
 uvicorn app.main:app --reload --port 8000
 ```
@@ -45,9 +57,25 @@ uvicorn app.main:app --reload --port 8000
 
 ```bash
 cd frontend
-npm install
-npm run dev
+corepack enable
+pnpm install --frozen-lockfile
+pnpm dev
 ```
+
+정적 검증:
+
+```bash
+cd frontend
+pnpm lint
+pnpm typecheck
+pnpm build
+
+cd ../backend
+python -m compileall app
+python -c "from app.main import app; print(app.title)"
+```
+
+동일 검증은 GitHub Actions에서도 실행합니다.
 
 ## 환경 변수
 
@@ -61,7 +89,9 @@ npm run dev
 - `RETENTION_DAYS`
 - `MAX_UPLOAD_MB`
 - `CONFIDENCE_THRESHOLD`
-- `MERMIAD_KOREAN_FONT_PATH`
+- `GICHUL_FORGE_KOREAN_FONT_PATH`
+
+기존 `MERMIAD_KOREAN_FONT_PATH`도 호환을 위해 계속 읽습니다.
 
 ## 2022 개정 교육과정 데이터
 
@@ -87,23 +117,17 @@ npm run dev
 ## 저장소 구조
 
 ```text
-backend/                    FastAPI 백엔드 및 PDF/OCR/태깅 파이프라인
-frontend/                   Next.js 프론트엔드
+.github/                   CI 및 Dependabot 설정
+backend/                   FastAPI 백엔드 및 PDF/OCR/태깅 파이프라인
+frontend/                  Next.js 프론트엔드
 docs/
-  architecture/             Mermaid 설계 문서와 원본
-  audits/                   구현 점검 및 검증 기록
-docker-compose.yml          로컬 컨테이너 실행
-run.bat                     Windows 로컬 개발 런처
+  architecture/            Mermaid 설계 문서와 원본
+  audits/                  구현 점검 및 검증 기록
+docker-compose.yml         로컬 컨테이너 실행
+run.bat                    Windows 로컬 개발 런처
 ```
 
 문서 인덱스는 [`docs/README.md`](./docs/README.md)를 참고하세요.
-
-## 문서
-
-- [아키텍처 및 Mermaid 다이어그램](./docs/architecture/mermaid-charts.md)
-- [구현 노드 점검](./docs/audits/implementation-audit.md)
-- [검증 기록](./docs/audits/validation.md)
-- [노드별 구현 매핑](./docs/audits/node-audit.csv)
 
 ## 운영 전 확인 사항
 
@@ -113,4 +137,4 @@ run.bat                     Windows 로컬 개발 런처
 4. 저장 기간 및 삭제 정책의 실제 구현
 5. 다양한 학교 시험지 형식에 대한 OCR/문항 추출 회귀 테스트
 
-> `docs/audits/`의 검증 기록은 작성 당시 상태를 나타냅니다. 이후 코드 변경 시 다시 검증해 갱신해야 합니다.
+> `docs/audits/`의 기록은 특정 시점의 검증 결과입니다. 기능 또는 의존성 변경 후에는 CI 결과와 함께 갱신합니다.

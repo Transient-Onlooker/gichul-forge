@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -23,7 +24,7 @@ class Settings(BaseSettings):
     nvidia_nim_timeout_seconds: int = 120
     nvidia_nim_max_retries: int = 2
 
-    mermiad_korean_font_path: str = ""
+    korean_font_path: str = Field(\n        default="",\n        validation_alias=AliasChoices("GICHUL_FORGE_KOREAN_FONT_PATH", "MERMIAD_KOREAN_FONT_PATH"),\n    )
 
     model_config = SettingsConfigDict(
         env_file=("../.env.local", ".env.local"),

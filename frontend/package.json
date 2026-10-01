@@ -1,30 +1,33 @@
 {
-  "name": "mermiad-frontend",
-  "version": "2.0.0",
+  "name": "gichul-forge-frontend",
+  "version": "2.1.0",
   "private": true,
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=12.8.1"
+  },
   "scripts": {
-    "dev": "next dev --webpack -p 3000",
-    "build": "next build --webpack",
+    "dev": "next dev -p 3000",
+    "build": "next build",
     "start": "next start -p 3000",
-    "lint": "next lint"
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm lint && pnpm typecheck && pnpm build"
   },
   "dependencies": {
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
-    "lucide-react": "^0.468.0",
-    "mermaid": "^11.4.1",
-    "next": "16.2.10",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "typescript": "^5.7.2"
+    "lucide-react": "1.47.0",
+    "mermaid": "12.0.0",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "eslint": "^9.17.0",
-    "eslint-config-next": "16.2.10"
-  },
-  "overrides": {
-    "postcss": "^8.5.10"
+    "@types/node": "24.19.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.8",
+    "typescript": "6.0.2"
   }
 }

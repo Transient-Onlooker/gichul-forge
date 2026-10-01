@@ -33,14 +33,28 @@ if not defined PYTHON_CMD (
 )
 
 if not defined PYTHON_CMD (
-  echo ERROR: Python was not found. Install Python 3.11+ and run this file again.
+  echo ERROR: Python was not found. Install Python 3.14+ and run this file again.
   pause
   exit /b 1
 )
 
-where npm >nul 2>nul
+where node >nul 2>nul
 if errorlevel 1 (
-  echo ERROR: npm was not found. Install Node.js 20+ and run this file again.
+  echo ERROR: Node.js was not found. Install Node.js 24+ and run this file again.
+  pause
+  exit /b 1
+)
+
+where corepack >nul 2>nul
+if errorlevel 1 (
+  echo ERROR: Corepack was not found. Install or enable Corepack, then run this file again.
+  pause
+  exit /b 1
+)
+
+call corepack enable
+if errorlevel 1 (
+  echo ERROR: Failed to enable Corepack.
   pause
   exit /b 1
 )
@@ -58,6 +72,7 @@ if not exist "backend\.venv\Scripts\python.exe" (
 "%ROOT%backend\.venv\Scripts\python.exe" -c "import fastapi, uvicorn" >nul 2>nul
 if errorlevel 1 (
   echo Installing backend dependencies...
+  "%ROOT%backend\.venv\Scripts\python.exe" -m pip install --upgrade pip
   "%ROOT%backend\.venv\Scripts\python.exe" -m pip install -r "%ROOT%backend\requirements.txt"
   if errorlevel 1 (
     echo ERROR: Failed to install backend dependencies.
@@ -67,22 +82,14 @@ if errorlevel 1 (
 )
 
 if not exist "frontend\node_modules\next\package.json" (
-  echo Installing frontend dependencies...
+  echo Installing frontend dependencies with pnpm...
   pushd "%ROOT%frontend"
-  if exist "pnpm-lock.yaml" (
-    call corepack pnpm install
-  ) else (
-    call npm install
-  )
+  call pnpm install --frozen-lockfile
   if errorlevel 1 (
-    echo npm/pnpm install failed. Retrying with npm...
-    call npm install
-    if errorlevel 1 (
-      popd
-      echo ERROR: Failed to install frontend dependencies.
-      pause
-      exit /b 1
-    )
+    popd
+    echo ERROR: Failed to install frontend dependencies.
+    pause
+    exit /b 1
   )
   popd
 )
@@ -91,7 +98,7 @@ echo Starting backend on http://localhost:8000
 start "Gichul Forge Backend" /D "%ROOT%backend" cmd /k "call .venv\Scripts\activate.bat && python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000"
 
 echo Starting frontend on http://localhost:3000
-start "Gichul Forge Frontend" /D "%ROOT%frontend" cmd /k "set NEXT_PUBLIC_API_BASE_URL=http://localhost:8000&& call npm run dev"
+start "Gichul Forge Frontend" /D "%ROOT%frontend" cmd /k "set NEXT_PUBLIC_API_BASE_URL=http://localhost:8000&& call pnpm dev"
 
 echo.
 echo Servers are starting in separate windows.
