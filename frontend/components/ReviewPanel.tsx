@@ -7,6 +7,10 @@ import { continueJob, finalizeJob, patchAsset, patchMetadata, resolveIssue } fro
 
 export default function ReviewPanel({ job, refresh }: { job: JobSnapshot | null; refresh: () => void }) {
   const [saving, setSaving] = useState(false);
+  const sortedIssues = useMemo(
+    () => [...(job?.issues ?? [])].sort((a, b) => Number(a.resolved) - Number(b.resolved)),
+    [job?.issues],
+  );
 
   if (!job) {
     return <div className="empty">작업을 시작하면 메타데이터, PDF 역할, 검수 이슈가 여기 표시됩니다.</div>;
@@ -15,10 +19,6 @@ export default function ReviewPanel({ job, refresh }: { job: JobSnapshot | null;
   const currentJob = job;
   const unresolvedCurriculum = currentJob.issues.some(
     (issue) => issue.context?.type === "curriculum_confirmation" && !issue.resolved,
-  );
-  const sortedIssues = useMemo(
-    () => [...currentJob.issues].sort((a, b) => Number(a.resolved) - Number(b.resolved)),
-    [currentJob.issues],
   );
 
   async function saveMetadata(metadata: ExamMetadata) {

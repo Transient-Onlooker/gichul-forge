@@ -24,7 +24,10 @@ class Settings(BaseSettings):
     nvidia_nim_timeout_seconds: int = 120
     nvidia_nim_max_retries: int = 2
 
-    korean_font_path: str = Field(\n        default="",\n        validation_alias=AliasChoices("GICHUL_FORGE_KOREAN_FONT_PATH", "MERMIAD_KOREAN_FONT_PATH"),\n    )
+    korean_font_path: str = Field(
+        default="",
+        validation_alias=AliasChoices("GICHUL_FORGE_KOREAN_FONT_PATH", "MERMIAD_KOREAN_FONT_PATH"),
+    )
 
     model_config = SettingsConfigDict(
         env_file=("../.env.local", ".env.local"),

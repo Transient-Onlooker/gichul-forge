@@ -128,11 +128,12 @@ export default function Home() {
       window.localStorage.getItem(ACTIVE_JOB_KEY) ??
       window.localStorage.getItem(LEGACY_ACTIVE_JOB_KEY);
 
-    if (saved) {
-      setJobId(saved);
-      window.localStorage.setItem(ACTIVE_JOB_KEY, saved);
-      window.localStorage.removeItem(LEGACY_ACTIVE_JOB_KEY);
-    }
+    if (!saved) return;
+
+    window.localStorage.setItem(ACTIVE_JOB_KEY, saved);
+    window.localStorage.removeItem(LEGACY_ACTIVE_JOB_KEY);
+    const timer = window.setTimeout(() => setJobId(saved), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -152,6 +153,9 @@ export default function Home() {
       try {
         const next = await getJob(jobId);
         setJob(next);
+        if (next.waitingFor === "E16" || next.waitingFor === "S2" || next.status === "needs_review") {
+          setTab("review");
+        }
         if (["queued", "running"].includes(next.status) && !stop) timer = setTimeout(poll, 1300);
       } catch (e) {
         setError(e instanceof Error ? e.message : "상태 조회에 실패했습니다.");
@@ -164,12 +168,6 @@ export default function Home() {
       if (timer) clearTimeout(timer);
     };
   }, [jobId]);
-
-  useEffect(() => {
-    if (job?.waitingFor === "E16" || job?.waitingFor === "S2" || job?.status === "needs_review") {
-      setTab("review");
-    }
-  }, [job?.status, job?.waitingFor]);
 
   useEffect(() => {
     const subject = job?.input.subject ?? "공통수학1";
