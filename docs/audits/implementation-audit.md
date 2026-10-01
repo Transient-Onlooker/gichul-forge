@@ -1,4 +1,4 @@
-# MERMIAD v2 노드 반영 자체 점검
+# Gichul Forge 노드 반영 자체 점검
 
 원문 Mermaid를 `backend/app/workflow.py`와 `frontend/lib/workflow/mermaidSource.ts`에 그대로 보존하고, 동일 정규식으로 파싱해 상태 패널을 구성했습니다.
 

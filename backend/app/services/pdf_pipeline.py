@@ -172,7 +172,7 @@ def parse_answers(text: str, exam_id: str) -> list[AnswerRecord]:
 def register_korean_font() -> str:
     settings = get_settings()
     candidates = [
-        settings.mermiad_korean_font_path,
+        settings.korean_font_path,
         "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
         "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
         "/System/Library/Fonts/AppleSDGothicNeo.ttc",

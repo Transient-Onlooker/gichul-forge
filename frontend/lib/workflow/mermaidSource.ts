@@ -1,4 +1,4 @@
-export const MERMIAD_MERMAID_SOURCE = String.raw`flowchart TD
+export const GICHUL_FORGE_MERMAID_SOURCE = String.raw`flowchart TD
     A["기출문제 업로드"]
     B["과목 입력"]
 

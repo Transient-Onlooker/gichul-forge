@@ -401,7 +401,7 @@ async def continue_processing(job_id: str) -> None:
         _finish(job, "P3", "목차 페이지 생성")
         _finish(job, "P4", "목차에 저작권 문구 추가")
 
-        final_pdf = out_dir / "MERMIAD_final.pdf"
+        final_pdf = out_dir / "gichul-forge-final.pdf"
         _finish(job, "Q1", "표지, 목차, 문제 PDF, 답지 페이지 병합")
         merge_pdfs([cover_pdf, toc_pdf, problem_pdf, answer_pdf], final_pdf)
         _finish(job, "Q2", "최종 PDF 생성")

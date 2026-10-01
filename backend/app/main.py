@@ -13,7 +13,7 @@ from .services.curriculum import curriculum_for
 from .worker import run_until_review, continue_processing, finalize_job
 
 settings = get_settings()
-app = FastAPI(title="MERMIAD Python Backend", version="2.0.0")
+app = FastAPI(title="Gichul Forge Backend", version="2.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
@@ -25,7 +25,7 @@ app.add_middleware(
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"ok": True, "service": "mermiad-backend", "env": settings.app_env}
+    return {"ok": True, "service": "gichul-forge-backend", "env": settings.app_env}
 
 
 @app.get("/api/config")
@@ -149,7 +149,7 @@ def download(job_id: str) -> FileResponse:
     path = Path(job.result.finalPdfPath)
     if not path.exists():
         raise HTTPException(status_code=404, detail="final PDF file missing")
-    return FileResponse(path, media_type="application/pdf", filename="MERMIAD_final.pdf")
+    return FileResponse(path, media_type="application/pdf", filename="gichul-forge-final.pdf")
 
 
 @app.delete("/api/jobs/{job_id}")

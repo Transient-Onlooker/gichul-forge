@@ -21,12 +21,13 @@ import CurriculumPanel from "@/components/CurriculumPanel";
 import MermaidDiagram from "@/components/MermaidDiagram";
 import { createJob, downloadUrl, getConfig, getCurriculum, getJob } from "@/lib/api";
 import type { CurriculumUnit, JobSnapshot, PublicConfig } from "@/lib/types";
-import { MERMIAD_MERMAID_SOURCE } from "@/lib/workflow/mermaidSource";
+import { GICHUL_FORGE_MERMAID_SOURCE } from "@/lib/workflow/mermaidSource";
 import { parseWorkflowNodes } from "@/lib/workflow/definition";
 
 type TabKey = "status" | "review" | "curriculum" | "graph";
 
-const ACTIVE_JOB_KEY = "mermiad.activeJobId";
+const ACTIVE_JOB_KEY = "gichul-forge.activeJobId";
+const LEGACY_ACTIVE_JOB_KEY = "mermiad.activeJobId";
 
 function statusLabel(status?: JobSnapshot["status"]) {
   switch (status) {
@@ -103,7 +104,7 @@ function nextAction(job: JobSnapshot | null) {
 }
 
 export default function Home() {
-  const nodes = useMemo(() => parseWorkflowNodes(MERMIAD_MERMAID_SOURCE), []);
+  const nodes = useMemo(() => parseWorkflowNodes(GICHUL_FORGE_MERMAID_SOURCE), []);
   const [config, setConfig] = useState<PublicConfig | null>(null);
   const [job, setJob] = useState<JobSnapshot | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
@@ -123,8 +124,16 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(ACTIVE_JOB_KEY);
-    if (saved) setJobId(saved);
+    const saved =
+      window.localStorage.getItem(ACTIVE_JOB_KEY) ??
+      window.localStorage.getItem(LEGACY_ACTIVE_JOB_KEY);
+
+    if (!saved) return;
+
+    window.localStorage.setItem(ACTIVE_JOB_KEY, saved);
+    window.localStorage.removeItem(LEGACY_ACTIVE_JOB_KEY);
+    const timer = window.setTimeout(() => setJobId(saved), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -144,6 +153,9 @@ export default function Home() {
       try {
         const next = await getJob(jobId);
         setJob(next);
+        if (next.waitingFor === "E16" || next.waitingFor === "S2" || next.status === "needs_review") {
+          setTab("review");
+        }
         if (["queued", "running"].includes(next.status) && !stop) timer = setTimeout(poll, 1300);
       } catch (e) {
         setError(e instanceof Error ? e.message : "상태 조회에 실패했습니다.");
@@ -156,12 +168,6 @@ export default function Home() {
       if (timer) clearTimeout(timer);
     };
   }, [jobId]);
-
-  useEffect(() => {
-    if (job?.waitingFor === "E16" || job?.waitingFor === "S2" || job?.status === "needs_review") {
-      setTab("review");
-    }
-  }, [job?.status, job?.waitingFor]);
 
   useEffect(() => {
     const subject = job?.input.subject ?? "공통수학1";
@@ -215,7 +221,7 @@ export default function Home() {
         <div className="hero-copy">
           <div className="eyebrow">
             <Sparkles size={15} />
-            <span>MERMIAD Service v2</span>
+            <span>Gichul Forge</span>
           </div>
           <h1>기출 PDF를 2022 개정 기준 단원 문제집으로 정리합니다.</h1>
           <p>업로드, OCR, 단원 배치, 검수, 최종 PDF 생성까지 한 화면에서 이어서 처리할 수 있게 정리한 작업 대시보드입니다.</p>
@@ -406,7 +412,7 @@ export default function Home() {
           {tab === "status" && <StatusTimeline job={job} nodes={nodes} />}
           {tab === "review" && <ReviewPanel job={job} refresh={refresh} />}
           {tab === "curriculum" && <CurriculumPanel units={curriculumUnits} />}
-          {tab === "graph" && <MermaidDiagram source={MERMIAD_MERMAID_SOURCE} />}
+          {tab === "graph" && <MermaidDiagram source={GICHUL_FORGE_MERMAID_SOURCE} />}
         </section>
       </section>
     </main>
