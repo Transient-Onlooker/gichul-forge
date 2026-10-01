@@ -2,3 +2,6 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 minimumReleaseAge: 0
+overrides:
+  browserslist: 4.29.0
+  lodash-es: 4.18.1
