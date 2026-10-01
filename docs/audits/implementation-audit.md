@@ -6,7 +6,7 @@
 
 - Mermaid 원문 파싱 노드 수: **161개**
 - 상태 패널 표시 노드 수: **161개**
-- `NODE_AUDIT.csv` 전체 행 수: **161개**
+- `node-audit.csv` 전체 행 수: **161개**
 - 백엔드 실행 상태 모델: `pending`, `running`, `completed`, `needs_review`, `skipped`, `failed`
 - 사용자 확인 게이트: `E16`, `S2`
 - 오류/중단 게이트: `X1`, `X2`, `X3`, `X5`
@@ -49,4 +49,4 @@
 
 - 실제 OCR/비전 품질은 선택한 NVIDIA NIM 모델, PDF 스캔 품질, 서버 PDF 렌더링 환경에 따라 달라집니다.
 - NIM API 키가 없을 때도 워크플로 검증과 PDF 생성 구조는 동작하지만, 고정밀 OCR/좌표 추정은 휴리스틱으로 대체됩니다.
-- `NODE_AUDIT.csv`에는 노드별 구현 위치가 들어 있습니다.
+- `node-audit.csv`에는 노드별 구현 위치가 들어 있습니다.

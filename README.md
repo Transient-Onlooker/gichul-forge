@@ -1,32 +1,34 @@
-# MERMIAD Service v2
+# Gichul Forge
 
 기출 PDF/ZIP을 업로드하면 과목·교육과정 기준으로 문항을 분리하고, NVIDIA NIM 기반 OCR/비전/태깅을 거쳐 단원별 문제 모음집 PDF를 생성하는 웹서비스입니다.
 
-이번 버전은 **프론트엔드 Next.js/React/TypeScript + 백엔드 Python/FastAPI** 구조입니다. 기존 Next.js API Route 백엔드는 제거했고, 모든 처리 파이프라인은 `backend/`의 Python 서비스 계층에서 동작합니다.
+현재 구조는 **Next.js/React/TypeScript 프론트엔드 + Python/FastAPI 백엔드**로 구성되어 있습니다.
 
-## 핵심 개선점
+## 주요 기능
 
-- Python FastAPI 백엔드 분리
-- 2022 개정 교육과정 기준 SQLite DB와 예전 기출 매핑/제외 규칙
-- `.env.local`에서 NVIDIA NIM 모델을 역할별로 직접 선택 가능
-- 텍스트, 비전, OCR, 메타데이터, 단원 태깅, QA 모델 분리 설정
-- UX 개선: 업로드 마법사, 모델 설정 패널, 실시간 노드 진행률, 검수 큐, 메타데이터/역할 수정, 최종 승인 단계
-- Mermaid 원문 161개 노드 전체 파싱 및 상태 패널 반영
-- `NODE_AUDIT.csv`, `IMPLEMENTATION_AUDIT.md`에 전체 노드 반영 점검 결과 포함
+- PDF/ZIP 업로드 및 문제지·답지 역할 판별
+- 2022 개정 교육과정 기반 단원 태깅
+- NVIDIA NIM 기반 OCR, 비전, 메타데이터 추출, 태깅, QA
+- 문항 이미지 추출 및 검수
+- 단원별 재배치와 문제/답지 PDF 생성
+- 사용자 확인이 필요한 항목을 위한 검수 큐
+- 워크플로 상태 추적 및 Mermaid 설계 문서
 
 ## 빠른 실행
 
 ```bash
 cp .env.local.example .env.local
-# .env.local에 NVIDIA_NIM_API_KEY와 원하는 모델명을 입력
+# .env.local에 NVIDIA_NIM_API_KEY와 필요한 모델명을 설정
 
 docker compose up --build
 ```
 
-브라우저: `http://localhost:3000`  
-백엔드 API 문서: `http://localhost:8000/docs`
+- 프론트엔드: http://localhost:3000
+- 백엔드 API 문서: http://localhost:8000/docs
 
-## 로컬 개발 실행
+Windows에서는 루트의 `run.bat`으로 로컬 개발 서버를 시작할 수 있습니다.
+
+## 로컬 개발
 
 ### 백엔드
 
@@ -47,37 +49,31 @@ npm install
 npm run dev
 ```
 
-## `.env.local` 모델 설정
+## 환경 변수
 
-```env
-NVIDIA_NIM_API_KEY=nvapi-...
-NVIDIA_NIM_BASE_URL=https://integrate.api.nvidia.com/v1
+예시는 [`.env.local.example`](./.env.local.example)에 있습니다.
 
-# 역할별 모델. 계정에서 접근 가능한 NIM 모델명으로 교체하세요.
-NVIDIA_NIM_TEXT_MODEL=nvidia/nemotron-3-ultra-550b-a55b
-NVIDIA_NIM_VISION_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
-NVIDIA_NIM_OCR_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
-NVIDIA_NIM_METADATA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
-NVIDIA_NIM_TAGGER_MODEL=nvidia/nemotron-3-ultra-550b-a55b
-NVIDIA_NIM_QA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
-```
+주요 항목:
 
-프론트 UI의 “모델/서버 설정” 카드에서 백엔드가 읽은 현재 모델명을 확인할 수 있습니다.
+- `NEXT_PUBLIC_API_BASE_URL`
+- `NVIDIA_NIM_API_KEY`
+- `NVIDIA_NIM_*_MODEL`
+- `RETENTION_DAYS`
+- `MAX_UPLOAD_MB`
+- `CONFIDENCE_THRESHOLD`
+- `MERMIAD_KOREAN_FONT_PATH`
 
-## 2022 개정 교육과정 DB
+## 2022 개정 교육과정 데이터
 
-교육과정 기준은 2022 개정으로 한정합니다. 백엔드는 최초 실행 시 `backend/app/data/curriculum_2022_seed.json`을 읽어 `storage/curriculum_2022.sqlite`를 생성하고, 이후 `/api/curriculum`과 문항 태깅 기준으로 사용합니다.
+백엔드는 최초 실행 시 `backend/app/data/curriculum_2022_seed.json`을 읽어 교육과정 DB를 구성합니다.
 
-- 2022 개정 범위 밖으로 판단되는 예전 기출 문항은 생성 PDF 대상에서 제외합니다.
-- 2022 개정에서 새로 들어오거나 다른 과목/단원에서 이동한 단원은 Issue Queue에 확인 항목으로 표시합니다.
-- 사용자는 해당 단원을 `포함`하거나 `이 단원 없이 진행`할 수 있습니다.
-- seed 데이터는 초기 운영용 골격입니다. 실제 운영 전에는 공식 교육과정 원문 기준으로 단원/성취기준/키워드를 더 촘촘하게 보강해야 합니다.
+이 seed는 초기 운영용 골격이므로 실제 운영 전에는 공식 교육과정 원문을 기준으로 단원·성취기준·키워드를 검증하고 보강해야 합니다.
 
 ## 주요 API
 
 - `GET /api/health`
 - `GET /api/config`
-- `GET /api/curriculum?subject=수학&grade=고1`
+- `GET /api/curriculum`
 - `POST /api/jobs`
 - `GET /api/jobs/{job_id}`
 - `PATCH /api/jobs/{job_id}/metadata`
@@ -88,46 +84,33 @@ NVIDIA_NIM_QA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
 - `GET /api/jobs/{job_id}/download`
 - `DELETE /api/jobs/{job_id}`
 
-## 폴더 구조
+## 저장소 구조
 
 ```text
-backend/     Python FastAPI 백엔드, NIM 클라이언트, PDF/OCR/태깅/검수 파이프라인
-frontend/    Next.js + React + TypeScript UI
-NODE_AUDIT.csv
-IMPLEMENTATION_AUDIT.md
+backend/                    FastAPI 백엔드 및 PDF/OCR/태깅 파이프라인
+frontend/                   Next.js 프론트엔드
+docs/
+  architecture/             Mermaid 설계 문서와 원본
+  audits/                   구현 점검 및 검증 기록
+docker-compose.yml          로컬 컨테이너 실행
+run.bat                     Windows 로컬 개발 런처
 ```
 
-## Mermaid 설계 다이어그램
+문서 인덱스는 [`docs/README.md`](./docs/README.md)를 참고하세요.
 
-이 프로젝트에는 사용자 제공 Mermaid 다이어그램 원본이 포함되어 있습니다. 전체 파이프라인을 단일 차트로 보관하면서도, 개발과 디버깅이 쉽도록 단계별 `.mmd` 파일로 분리했습니다.
+## 문서
 
-### 구성
+- [아키텍처 및 Mermaid 다이어그램](./docs/architecture/mermaid-charts.md)
+- [구현 노드 점검](./docs/audits/implementation-audit.md)
+- [검증 기록](./docs/audits/validation.md)
+- [노드별 구현 매핑](./docs/audits/node-audit.csv)
 
-- `all_mermaid_charts.md`: 모든 Mermaid 코드를 하나의 Markdown 문서로 모은 파일
-- `mermaid charts/*.mmd`: 다이어그램별 Mermaid 원본 코드 파일
-- `mermaid charts/99_original_single_full_flowchart.mmd`: 원본 단일 전체 Mermaid flowchart
+## 운영 전 확인 사항
 
-### 다이어그램 파일 목록
+1. 실제 사용할 NVIDIA NIM 모델의 접근 권한과 모델명
+2. PDF 렌더링 성능 및 동시 작업 큐 제한
+3. 업로드 자료의 저작권·개인정보 고지와 처리 정책
+4. 저장 기간 및 삭제 정책의 실제 구현
+5. 다양한 학교 시험지 형식에 대한 OCR/문항 추출 회귀 테스트
 
-- `00_overall_orchestration.mmd`: 0. 전체 오케스트레이션
-- `01_upload_consent_subject_validation.mmd`: 1. 업로드, 동의, 과목 검증
-- `02_file_format_metadata.mmd`: 2. 파일 형식 확인 및 메타데이터 확정
-- `03_pdf_role_detection_split.mmd`: 3. PDF 역할 판별 및 문제지/답지 분리
-- `04_ocr_answer_parsing_unit_tagging.mmd`: 4. OCR, 답지 파싱, 단원 태깅
-- `05_question_image_extraction_quality_check.mmd`: 5. 문항 이미지 추출 및 품질 검수
-- `06_unit_arrangement_problem_pdf_generation.mmd`: 6. 단원별 배치 및 문제 PDF 생성
-- `07_answer_cover_toc_final_merge.mmd`: 7. 답지 재구성, 표지, 목차, 최종 병합
-- `08_final_review_issue_loop.mmd`: 8. 최종 검수 및 이슈 수정 루프
-- `09_ai_call_sequence.mmd`: 9. AI 호출 시점 전용 다이어그램
-- `10_status_panel.mmd`: 10. 상태 패널만 따로 분리
-- `99_original_single_full_flowchart.mmd`: 원본 단일 전체 Mermaid flowchart
-
-## 실제 운영 전 확인 사항
-
-이 프로젝트는 서비스 가능한 구조를 목표로 작성되어 있지만, 운영 배포 전에는 다음을 반드시 검증하세요.
-
-1. 사용할 NVIDIA NIM 모델의 실제 권한과 모델명
-2. 서버의 PDF 렌더링 성능 및 동시 작업 큐 제한
-3. 저작권/개인정보 고지 문구의 법무 검토
-4. 저장 기간과 삭제 정책의 실제 구현 정책
-5. 학교 시험지 PDF 형식별 OCR 정확도 회귀 테스트
+> `docs/audits/`의 검증 기록은 작성 당시 상태를 나타냅니다. 이후 코드 변경 시 다시 검증해 갱신해야 합니다.

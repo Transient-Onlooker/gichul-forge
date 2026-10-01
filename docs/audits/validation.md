@@ -40,4 +40,4 @@ npm audit --omit=dev
 
 ## 노드 점검
 
-`NODE_AUDIT.csv`에 Mermaid 원문 161개 노드 전부를 노드 ID, 라벨, 그룹, 구현 위치, 반영 상태로 기록했습니다.
+`node-audit.csv`에 Mermaid 원문 161개 노드 전부를 노드 ID, 라벨, 그룹, 구현 위치, 반영 상태로 기록했습니다.
